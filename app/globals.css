@@ -5,7 +5,41 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --navbar-height: 170px; /* Adjust to your actual navbar height */
 }
+
+/* Navbar styling */
+.navbar {
+  /* position: fixed; */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+
+}
+
+/* Hero section styling */
+.hero-section {
+  margin-top: var(--navbar-height); /* Ensure hero section starts after navbar */
+  height: calc(100vh - var(--navbar-height)); /* Make hero section full height minus navbar */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 10; /* Ensure it's below the navbar */
+  position: relative;
+}
+
+/* Hero content (for centering text, etc.) */
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+}
+
+
 
 @media (prefers-color-scheme: dark) {
   :root {
