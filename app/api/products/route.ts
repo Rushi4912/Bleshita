@@ -1,38 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '../../utils/mongodb';
-import Product from '../models/product';
-import { MongooseError } from 'mongoose';
+import Product, { IProduct } from '../models/product';
 
-// API to handle product creation (POST request)
-export async function POST(request: NextRequest) {
+export async function GET() {
+  await dbConnect();
+
   try {
-    // Connect to the database
-    await dbConnect();
+    const products = await Product.find({});
+    return NextResponse.json({ success: true, data: products }, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+  }
+}
 
-    const { name, description, price, category, stock } = await request.json();
+export async function POST(req: NextRequest) {
+  await dbConnect();
 
-    
-    const newProduct = new Product({
-      name,
-      price,
-      category,
-      description,
-      stock,  
-      
-    });
-    await newProduct.save();
-
-    // Return a success response
-    return NextResponse.json({ message: 'Product added successfully' }, { status: 201 });
-  } catch (error) {
-    if (error instanceof MongooseError) {
-      // Handle Mongoose-specific errors
-      console.error('Error creating product:', error.message);
-    } else {
-      // Generic error handling
-      console.error('Unknown error:', error);
-    }
-
-    return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+  try {
+    const body = await req.json();
+    const product: IProduct = await Product.create(body);
+    return NextResponse.json({ success: true, data: product }, { status: 201 });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
   }
 }

@@ -20,6 +20,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <span className="text-gray-600">${product.price}</span>
         <span className="text-yellow-500">★ {product.rating}</span>
       </div>
+      
       <button className="mt-4 px-4 py-2 bg-black text-white text-sm rounded-lg hover:bg-gray-800 transition-all duration-200">
         Add to Cart
       </button>
