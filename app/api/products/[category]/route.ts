@@ -1,35 +1,33 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '../../../utils/mongodb';
 import Product from '../../models/product';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+// Handle GET request
+export async function GET(req: NextRequest, { params }: { params: { category: string } }) {
   await dbConnect();
 
-  const {
-    method,
-    query: { category },
-  } = req;
+  const { category } = params;
 
-  switch (method) {
-    case 'GET': // Fetch products by category
-      try {
-        if (!category || typeof category !== 'string') {
-          return res.status(400).json({ success: false, error: 'Invalid category' });
-        }
+  if (!category || typeof category !== 'string') {
+    return NextResponse.json(
+      { success: false, error: 'Invalid or missing category parameter' },
+      { status: 400 }
+    );
+  }
 
-        const products = await Product.find({ category });
-        if (products.length === 0) {
-          return res.status(404).json({ success: false, error: 'No products found in this category' });
-        }
+  try {
+    // Fetch products from database
+    const products = await Product.find({ category }).select('-__v'); // Exclude `__v` field
+    if (products.length === 0) {
+      return NextResponse.json(
+        { success: false, error: 'No products found in this category' },
+        { status: 404 }
+      );
+    }
 
-        res.status(200).json({ success: true, data: products });
-      } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-      }
-      break;
-
-    default:
-      res.status(405).json({ success: false, error: `Method ${method} not allowed` });
-      break;
+    return NextResponse.json({ success: true, data: products });
+  } catch (error: any) {
+    console.error('Error fetching products:', error.message);
+    return NextResponse.json({ success: false, error: 'Server error' }, { status: 500 });
   }
 }
