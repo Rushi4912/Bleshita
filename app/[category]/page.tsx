@@ -81,6 +81,7 @@ const CategoryPage: React.FC = () => {
 
         {/* Product Grid */}
         <div className="px-4 sm:px-6 lg:px-8">
+        console.log(filteredProducts);  // Check the array of products
           <ProductGrid products={filteredProducts.slice(0, showProducts)} />
           <div className="mt-8 text-center">
             {filteredProducts.length > showProducts && (
