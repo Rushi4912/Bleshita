@@ -1,10 +1,10 @@
 // app/page.tsx
 import React from 'react';
-import HeroSection from '../components/HomeSection';
+import HeroSection from './components/HomeSection';
 import { Collection } from "../app/types/types"; // Import the type
-import FeatureCollection from '@/components/FeatureCollection';
-import ProductFeature from "../components/ProductFeature";
-import Footer from '@/components/Footer';
+import FeatureCollection from '@/app/components/FeatureCollection';
+import ProductFeature from "./components/ProductFeature";
+import Footer from '@/app/components/Footer';
 
 const HomePage: React.FC = () => {
   const collections: Collection[] = [

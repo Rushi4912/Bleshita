@@ -1,6 +1,6 @@
 // app/layout.tsx
 import React, { ReactNode } from 'react';
-import Navbar from '../components/Navbar';
+import Navbar from './components/Navbar';
 import './globals.css'; // Import global styles here
 
 interface LayoutProps {

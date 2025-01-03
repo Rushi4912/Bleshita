@@ -1,6 +1,6 @@
 // FeatureCollection.tsx
 import React from "react";
-import { FeatureCollectionProps } from "../app/types/types"; // Import the type
+import { FeatureCollectionProps } from "../types/types"; // Import the type
 
 const FeatureCollection: React.FC<FeatureCollectionProps> = ({
   title,

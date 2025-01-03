@@ -1,26 +1,68 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import Image from "next/image";
-import Footer from "@/components/Footer";
+import Footer from "@/app/components/Footer";
 
-const ProductPage = () => {
-  const [selectedColor, setSelectedColor] = useState("Black");
-  const [selectedSize, setSelectedSize] = useState("M");
+type Product = {
+  _id: string;
+  name: string;
+  price: number;
+  imageGallery: string[];
+  colors: string[];
+  sizes: string[];
+  modelInfo: string;
+};
 
-  const product = {
-    name: "The Crinkle Long-Sleeve",
-    price: 5270,
-    imageGallery: [
-      "/assets/new/new1.jpeg",
-      "/assets/new/new2.jpeg",
-      "/assets/new/new3.jpeg",
-      "/assets/new/new4.jpeg"
-    ],
-    colors: ["Black", "Blue", "Beige"],
-    sizes: ["XXS", "XS", "S", "M", "L", "XL", "XXL"],
-    modelInfo: "Model is 5'9\", wearing a size S",
-  };
+const ProductPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>(); // Ensure type for id is a string
+  const [product, setProduct] = useState<Product | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/products?id=${id}`);
+        const data = await response.json();
+
+        if (data.success) {
+          setProduct(data.data);
+          setSelectedColor(data.data.colors[0]); // Default to the first color
+          setSelectedSize(data.data.sizes[0]); // Default to the first size
+        } else {
+          console.error("Failed to fetch product:", data.error);
+        }
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProduct();
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-gray-500 text-lg">Loading product...</p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500 text-lg">Product not found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white">
@@ -100,8 +142,16 @@ const ProductPage = () => {
           </div>
 
           <div className="mt-12 text-sm text-gray-600">
-          <h2 className="font-bold">If there's one thing we love, it's a matching set, and our Crinkle Knit collection is not to be slept on.</h2>
-          <p className="mt-4"> Add some romance to your wardrobe with a deep V. This piece features a relaxed fit, V-neck with a tie front, drapey long sleeves, and a lettuce-edged hem, made in our newest crinkled knit fabric. Bonus Points: Get the matching pants to create your new favorite party set.</p>
+            <h2 className="font-bold">
+              If there's one thing we love, it's a matching set, and our Crinkle Knit
+              collection is not to be slept on.
+            </h2>
+            <p className="mt-4">
+              Add some romance to your wardrobe with a deep V. This piece features a relaxed
+              fit, V-neck with a tie front, drapey long sleeves, and a lettuce-edged hem,
+              made in our newest crinkled knit fabric. Bonus Points: Get the matching pants
+              to create your new favorite party set.
+            </p>
           </div>
         </div>
       </div>

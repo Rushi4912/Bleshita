@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '../../../utils/mongodb'; // Adjust the path based on your folder structure
-import Product, { IProduct } from '../../models/product'; // Ensure your product model has TypeScript typings
+import dbConnect from '../../../../utils/mongodb'; // Adjust the path based on your folder structure
+import Product, { IProduct } from '../../../models/product'; // Ensure your product model has TypeScript typings
 
 // Define a type for the response data structure
 type ApiResponse<T> = {

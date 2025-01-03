@@ -2,34 +2,29 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import ProductGrid from "@/components/ProductGrid";
-import FiltersSidebar from "@/components/FiltersSidebar";
+import ProductGrid from "@/app/components/ProductGrid";
+import FiltersSidebar from "@/app/components/FiltersSidebar";
 
 const CategoryPage: React.FC = () => {
-  const { category } = useParams(); // Dynamically get the category
+  const { category } = useParams(); // Dynamic category from the route
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState<string>("all");
   const [showProducts, setShowProducts] = useState(12);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        setError(null);
-
-        const response = await fetch(`/api/products/${category}`);
+        const response = await fetch(`/api/products?category=${category}`);
         const data = await response.json();
-
-        if (response.ok && data.success) {
+        if (data.success) {
           setProducts(data.data);
         } else {
-          setError(data.error || "Failed to load products");
+          console.error("Failed to fetch products:", data.error);
         }
-      } catch (err: any) {
-        setError("Something went wrong while fetching products.");
-        console.error("Fetch Error:", err.message);
+      } catch (error) {
+        console.error("Error fetching products:", error);
       } finally {
         setLoading(false);
       }
@@ -40,15 +35,11 @@ const CategoryPage: React.FC = () => {
     }
   }, [category]);
 
-  // Filter products
   const filteredProducts =
     filter === "all"
       ? products
-      : products.filter((product) =>
-          product.category.toLowerCase() === filter.toLowerCase()
-        );
+      : products.filter((product) => product.category.toLowerCase() === filter.toLowerCase());
 
-  // Loading state
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -57,20 +48,11 @@ const CategoryPage: React.FC = () => {
     );
   }
 
-  // Error state
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-red-500 text-lg">Error: {error}</p>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-gray-100 flex">
       {/* Filters Sidebar */}
       <aside className="w-1/6 h-screen border-r p-4 ml-10 mr-6 mt-8 relative">
-        <FiltersSidebar onFilterChange={(newFilter) => setFilter(newFilter)} />
+        <FiltersSidebar />
       </aside>
 
       {/* Main Content */}
