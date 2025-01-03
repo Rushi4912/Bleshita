@@ -6,27 +6,30 @@ import ProductGrid from "@/components/ProductGrid";
 import FiltersSidebar from "@/components/FiltersSidebar";
 
 const CategoryPage: React.FC = () => {
-  const { category } = useParams();
+  const { category } = useParams(); // Dynamically get the category
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState<string>("all");
-  const [sizeOpen, setSizeOpen] = useState(false);
-  const [colorOpen, setColorOpen] = useState(false);
   const [showProducts, setShowProducts] = useState(12);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
+        setError(null);
+
         const response = await fetch(`/api/products/${category}`);
         const data = await response.json();
-        if (data.success) {
+
+        if (response.ok && data.success) {
           setProducts(data.data);
         } else {
-          console.error("Failed to fetch products:", data.error);
+          setError(data.error || "Failed to load products");
         }
-      } catch (error) {
-        console.error("Error fetching products:", error);
+      } catch (err: any) {
+        setError("Something went wrong while fetching products.");
+        console.error("Fetch Error:", err.message);
       } finally {
         setLoading(false);
       }
@@ -37,14 +40,15 @@ const CategoryPage: React.FC = () => {
     }
   }, [category]);
 
+  // Filter products
   const filteredProducts =
     filter === "all"
       ? products
-      : products.filter(
-          (product) =>
-            product.category.toLowerCase() === filter.toLowerCase()
+      : products.filter((product) =>
+          product.category.toLowerCase() === filter.toLowerCase()
         );
 
+  // Loading state
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -53,11 +57,20 @@ const CategoryPage: React.FC = () => {
     );
   }
 
+  // Error state
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500 text-lg">Error: {error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gray-100 flex">
       {/* Filters Sidebar */}
       <aside className="w-1/6 h-screen border-r p-4 ml-10 mr-6 mt-8 relative">
-        <FiltersSidebar />
+        <FiltersSidebar onFilterChange={(newFilter) => setFilter(newFilter)} />
       </aside>
 
       {/* Main Content */}
@@ -81,7 +94,6 @@ const CategoryPage: React.FC = () => {
 
         {/* Product Grid */}
         <div className="px-4 sm:px-6 lg:px-8">
-        console.log(filteredProducts);  // Check the array of products
           <ProductGrid products={filteredProducts.slice(0, showProducts)} />
           <div className="mt-8 text-center">
             {filteredProducts.length > showProducts && (
