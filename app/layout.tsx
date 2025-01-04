@@ -1,6 +1,7 @@
 // app/layout.tsx
 import React, { ReactNode } from 'react';
 import Navbar from './components/Navbar';
+import { CartProvider } from '../app/utils/cartContext';
 import './globals.css'; // Import global styles here
 
 interface LayoutProps {
@@ -11,9 +12,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        <main>{children}</main>
-        {/* Optionally, you can add a footer */}
+        <CartProvider>
+          <Navbar />
+          <main>{children}</main>
+        </CartProvider>
       </body>
     </html>
   );

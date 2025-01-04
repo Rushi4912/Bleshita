@@ -61,7 +61,7 @@ const CategoryPage: React.FC = () => {
         <section
           className="relative h-64 bg-cover bg-center mb-8"
           style={{
-            backgroundImage: `url(/assets/background/hero-${category}.jpeg)`,
+            backgroundImage: `url(/assets/background/hero-${category}.jpg)`,
           }}
         >
           <div className="absolute inset-0 bg-black opacity-50"></div>
