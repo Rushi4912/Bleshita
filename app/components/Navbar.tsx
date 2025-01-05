@@ -1,19 +1,41 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FiMenu } from "react-icons/fi";
-import { AiOutlineSearch, AiOutlineShoppingCart } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
 import Link from "next/link";
-import { useCart } from "../../app/utils/cartContext"; // Adjust the path as needed
-import CartSidebar from "../../app/components/CartSidebar"; 
+import { useCart } from "../../app/utils/cartContext";
+import CartSidebar from "../../app/components/CartSidebar";
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCartOpen, setCartOpen] = useState(false); // State for cart drawer
+  const [isDropdownOpen, setDropdownOpen] = useState(false); // State for Sign In/Sign Up dropdown
+  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown element
   const { cartItems } = useCart(); // Access cart items from context
 
   const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
-  const toggleCart = () => setCartOpen(!isCartOpen); // Toggle cart drawer visibility
+  const toggleCart = () => setCartOpen(!isCartOpen);
+
+  const handleDropdownToggle = () => setDropdownOpen(!isDropdownOpen);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   return (
     <header className="bg-white shadow-md w-full top-0 z-50 sticky">
@@ -26,10 +48,7 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
           {/* Hamburger Menu for Mobile */}
-          <button
-            className="md:hidden text-gray-700"
-            onClick={toggleMobileMenu}
-          >
+          <button className="md:hidden text-gray-700" onClick={toggleMobileMenu}>
             <FiMenu size={24} />
           </button>
 
@@ -56,9 +75,39 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Right: Search and Cart Icons */}
-          <div className="flex items-center space-x-6">
-            <AiOutlineSearch className="text-gray-700 hover:text-black w-5 h-5" />
+          {/* Right: Search, Sign In/Sign Up, and Cart Icons */}
+          <div className="flex items-center space-x-6 relative">
+            {/* Search Icon */}
+            <AiOutlineSearch className="text-gray-700 hover:text-black w-5 h-5 cursor-pointer" />
+
+            {/* Sign In/Sign Up Icon */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={handleDropdownToggle}
+                className="text-gray-700 hover:text-black relative"
+              >
+                <AiOutlineUser className="w-5 h-5" />
+              </button>
+
+              {/* Dropdown */}
+              {isDropdownOpen && (
+                <div className="absolute top-8 right-0 bg-white border border-gray-200 shadow-lg rounded-md py-2 w-40 z-50">
+                  <Link
+                    href="/api/auth/signin"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black text-sm"
+                  >
+                    Log In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black text-sm"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+            </div>
+
             {/* Cart Icon */}
             <button
               onClick={toggleCart}
