@@ -1,31 +1,56 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+// pages/api/auth/[...nextauth].ts
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
+import bcrypt from "bcryptjs";
+import dbConnect from "../../../utils/mongodb";
+import UserModel from "../../models/user"; // Assuming you have the user model
 
-const authOptions: NextAuthOptions = {
+export default NextAuth({
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        firstName: { label: "First Name", type: "text" },
+        lastName: { label: "Last Name", type: "text" },
       },
       async authorize(credentials) {
-        if (credentials?.username === "jsmith" && credentials?.password === "password") {
-          return { id: 1, name: "John Smith", email: "jsmith@example.com" };
+        await dbConnect();
+
+        // Check if the user exists (for login)
+        const existingUser = await UserModel.findOne({ email: credentials?.email });
+        if (existingUser) {
+          // User exists, so we compare passwords for login
+          const isMatch = await bcrypt.compare(credentials?.password || "", existingUser.password);
+          if (isMatch) {
+            return { id: existingUser._id, email: existingUser.email };
+          }
+        } else {
+          // User doesn't exist, create a new user (sign-up)
+          const hashedPassword = await bcrypt.hash(credentials?.password || "", 12);
+          const newUser = new UserModel({
+            firstName: credentials?.firstName,
+            lastName: credentials?.lastName,
+            email: credentials?.email,
+            password: hashedPassword,
+          });
+
+          await newUser.save();
+
+          // Return user data to be saved in session
+          return { id: newUser._id, email: newUser.email };
         }
-        return null;
+        return null; // If login fails, return null
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: "jwt",
+
+  pages: {
+    signIn: "/signin", // Your custom sign-in page
+    signUp: "/signup", // Optional: Define a custom sign-up page
   },
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -42,8 +67,5 @@ const authOptions: NextAuthOptions = {
       return session;
     },
   },
-};
-
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };
+  secret: process.env.NEXTAUTH_SECRET, 
+});

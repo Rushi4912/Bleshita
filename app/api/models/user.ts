@@ -2,11 +2,7 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
+  Name: {
     type: String,
     required: true,
   },
@@ -19,14 +15,7 @@ const userSchema = new mongoose.Schema({
     type: String, // Assuming you store password hash
     required: true,
   },
-  address: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    required: true,
-  },
+  
   createdAt: {
     type: Date,
     default: Date.now,
