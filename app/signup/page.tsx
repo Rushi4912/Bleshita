@@ -64,7 +64,7 @@ const SignUp: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label htmlFor="firstName" className="block text-gray-600 font-medium mb-2">
-                First Name
+                 Name
               </label>
               <input
                 type="text"
