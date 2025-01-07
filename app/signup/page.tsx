@@ -6,8 +6,7 @@ import Link from "next/link";
 
 const SignUp: React.FC = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     password: "",
   });
@@ -29,25 +28,35 @@ const SignUp: React.FC = () => {
     setError(null);
 
     try {
-      // Here we're trying to sign in using the credentials provider
-      // If you need to create an account, consider handling this on your backend instead
-      const response = await signIn("credentials", {
+      // API call to create the user in the database
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to create account");
+      }
+
+      // Automatically log the user in after successful signup
+      const signInResponse = await signIn("credentials", {
         redirect: false,
         email: formData.email,
         password: formData.password,
-        // Adding firstName and lastName for custom handling, if required
-        firstName: formData.firstName,
-        lastName: formData.lastName,
       });
 
-      if (response?.error) {
-        setError(response.error); // Set error if there was one
+      if (signInResponse?.error) {
+        setError(signInResponse.error);
       } else {
-        // Successfully signed in (or registered depending on your logic)
-        console.log("User signed up successfully");
+        console.log("User signed up and logged in successfully");
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
+    } catch (err: any) {
+      setError(err.message || "An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -63,33 +72,17 @@ const SignUp: React.FC = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="firstName" className="block text-gray-600 font-medium mb-2">
-                first  Name
+              <label htmlFor="name" className="block text-gray-600 font-medium mb-2">
+                Name
               </label>
               <input
                 type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
+                id="name"
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 text-black"
-                placeholder="Enter your first name"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="lastName" className="block text-gray-600 font-medium mb-2">
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 text-black"
-                placeholder="Enter your last name"
+                placeholder="Enter your full name"
                 required
               />
             </div>
@@ -139,7 +132,7 @@ const SignUp: React.FC = () => {
             <div className="text-center">
               <p className="text-gray-600 text-sm">
                 Already have an account?{" "}
-                <Link href="/signin" className="text-indigo-600 hover:underline">
+                <Link href="/api/auth/signin" className="text-indigo-600 hover:underline">
                   Log In
                 </Link>
               </p>
@@ -151,8 +144,8 @@ const SignUp: React.FC = () => {
           className="hidden md:block w-1/2 bg-cover bg-center rounded-r-lg"
           style={{
             backgroundImage: 'url("/assets/new/new4.jpeg")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
       </div>

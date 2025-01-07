@@ -1,64 +1,76 @@
-// pages/api/auth/[...nextauth].ts
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import dbConnect from "../../../utils/mongodb";
-import UserModel from "../../models/user"; // Ensure this path is correct
+import UserModel from "../../models/user";
 
-export default NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
+    // Google Provider
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
+
+    // Credentials Provider
     CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
-        firstName: { label: "First Name", type: "text" },
-        lastName: { label: "Last Name", type: "text" },
       },
       async authorize(credentials) {
-        try {
-          await dbConnect();
-
-          // Check if the user exists (for login)
-          const existingUser = await UserModel.findOne({ email: credentials?.email });
-          if (existingUser) {
-            // Compare plain text passwords (not secure, for testing purposes only)
-            if (credentials?.password === existingUser.password) {
-              return { id: existingUser._id, email: existingUser.email };
-            } else {
-              throw new Error("Invalid password.");
-            }
-          } else {
-            // If the user doesn't exist, create a new user (sign-up)
-            const newUser = new UserModel({
-              firstName: credentials?.firstName,
-              lastName: credentials?.lastName,
-              email: credentials?.email,
-              password: credentials?.password, // Store plain text password (for testing only)
-            });
-
-            await newUser.save();
-
-            // Return user data to be saved in session
-            return { id: newUser._id, email: newUser.email };
-          }
-        } catch (error) {
-          throw new Error(error.message || "Authorization failed.");
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Missing email or password");
         }
+
+        await dbConnect();
+
+        // Check if the user exists
+        const user = await UserModel.findOne({ email: credentials.email });
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        // Compare the plain password (for testing only)
+        if (credentials.password !== user.passwordHash) {
+          throw new Error("Invalid credentials");
+        }
+
+        return {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+        };
       },
     }),
   ],
 
-  pages: {
-    signIn: "/signin", // Custom sign-in page
-    signUp: "/signup", 
-  },
-
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
+    async jwt({ token, account, profile, user }) {
+      // If the user is signing in with Google
+      if (account?.provider === "google") {
+        await dbConnect();
+
+        // Check if user exists in the database
+        const existingUser = await UserModel.findOne({ email: profile?.email });
+
+        if (!existingUser) {
+          // Create a new user in the database
+          const newUser = new UserModel({
+            name: profile?.name,
+            email: profile?.email,
+            passwordHash: "", // No password for Google sign-in
+            createdAt: new Date(),
+          });
+
+          await newUser.save();
+        }
+
+        token.id = user?.id || existingUser?._id.toString();
+        token.email = profile?.email;
       }
+
       return token;
     },
     async session({ session, token }) {
@@ -66,11 +78,20 @@ export default NextAuth({
         session.user = {
           id: token.id,
           email: token.email,
+          name: session.user.name,
         };
       }
       return session;
     },
   },
 
-  secret: process.env.NEXTAUTH_SECRET, // Make sure this is set in your environment variables
-});
+  session: {
+    strategy: "jwt",
+  },
+
+  secret: process.env.NEXTAUTH_SECRET,
+};
+
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };

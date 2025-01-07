@@ -1,8 +1,7 @@
-// models/user.ts
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  Name: {
+  name: { // Changed from "Name" to "name" for better consistency
     type: String,
     required: true,
   },
@@ -11,17 +10,16 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  passwordHash: {
-    type: String, // Assuming you store password hash
+  passwordHash: { // Field for hashed password
+    type: String,
     required: true,
   },
-  
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-const User = mongoose.models.User || mongoose.model('User', userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;
