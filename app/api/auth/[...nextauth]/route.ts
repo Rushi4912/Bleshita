@@ -50,7 +50,7 @@ export default NextAuth({
 
   pages: {
     signIn: "/signin", // Custom sign-in page
-    signUp: "/signup", // Optional: Define a custom sign-up page
+    signUp: "/signup", 
   },
 
   callbacks: {
