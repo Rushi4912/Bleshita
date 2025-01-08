@@ -1,107 +1,126 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 
-const FiltersSidebar: React.FC = () => {
-  const [sizeOpen, setSizeOpen] = useState(false);
-  const [colorOpen, setColorOpen] = useState(false);
+interface FiltersSidebarProps {
+  setFilter: (filter: string) => void;
+  currentFilter: string;
+}
 
-  // Persist the filter states between refreshes
-  useEffect(() => {
-    const savedSizeState = localStorage.getItem("sizeOpen");
-    const savedColorState = localStorage.getItem("colorOpen");
-    setSizeOpen(savedSizeState === "true");
-    setColorOpen(savedColorState === "true");
-  }, []);
+const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilter }) => {
+  const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
+    category: false,
+    size: false,
+    color: false,
+    price: false,
+  });
 
-  const toggleSizeOpen = () => {
-    const newState = !sizeOpen;
-    setSizeOpen(newState);
-    localStorage.setItem("sizeOpen", newState.toString());
+  const toggleSection = (section: string) => {
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
-
-  const toggleColorOpen = () => {
-    const newState = !colorOpen;
-    setColorOpen(newState);
-    localStorage.setItem("colorOpen", newState.toString());
-  };
-
-  // Color options with 9 colors
-  const colorOptions = [
-    "Black", "White", "Brown", "Blue", "grey", "Red", "Purple", "pink", "tan"
-  ];
 
   return (
-    <div className="h-screen w-1/6  p-5 flex flex-col space-y-8 fixed  ">
-      {/* Size Filter */}
-      <div>
-        <button
-          onClick={toggleSizeOpen}
-          className="w-full flex justify-between text-left text-lg font-medium text-gray-700 hover:text-black mr-2" 
+    <div className="p-4">
+      {/* Category Filter */}
+      <div className="mb-6">
+        <div
+          className="flex items-center justify-between cursor-pointer"
+          onClick={() => toggleSection("category")}
         >
-          Size
-          <span>{sizeOpen ? "-" : "+"}</span>
-        </button>
-        {sizeOpen && (
-          <div className="mt-4 grid grid-cols-3 gap-3 ">
-            {["XS", "S", "M", "L", "XL"].map((size) => (
-              <button
-                key={size}
-                className="py-2 px-4 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-200 hover:text-black "
-              >
-                {size}
-                
-              </button>
-              
-            ))}
-          </div>
+          <h3 className="text-md font-semibold text-black">Category</h3>
+          {openSections.category ? (
+            <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+          ) : (
+            <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+          )}
+        </div>
+        {openSections.category && (
+          <ul className="mt-2 space-y-2 text-sm text-gray-700">
+            <li onClick={() => setFilter("all")} className="cursor-pointer">
+              All Categories
+            </li>
+            <li onClick={() => setFilter("women")} className="cursor-pointer">
+              Women
+            </li>
+            <li onClick={() => setFilter("men")} className="cursor-pointer">
+              Men
+            </li>
+            <li onClick={() => setFilter("new-arrivals")} className="cursor-pointer">
+              New Arrivals
+            </li>
+          </ul>
         )}
-        <hr className="border-gray-500 border-1 mt-2 "/>
+      </div>
+
+      {/* Size Filter */}
+      <div className="mb-6">
+        <div
+          className="flex items-center justify-between cursor-pointer"
+          onClick={() => toggleSection("size")}
+        >
+          <h3 className="text-md font-semibold text-black">Size</h3>
+          {openSections.size ? (
+            <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+          ) : (
+            <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+          )}
+        </div>
+        {openSections.size && (
+          <ul className="mt-2 space-y-2 text-sm text-gray-700">
+            <li>S</li>
+            <li>M</li>
+            <li>L</li>
+            <li>XL</li>
+          </ul>
+        )}
       </div>
 
       {/* Color Filter */}
-      <div>
-        <button
-          onClick={toggleColorOpen}
-          className="w-full flex justify-between text-left text-lg font-medium text-gray-700 hover:text-black"
+      <div className="mb-6">
+        <div
+          className="flex items-center justify-between cursor-pointer"
+          onClick={() => toggleSection("color")}
         >
-          Color
-          <span>{colorOpen ? "-" : "+"}</span>
-        </button>
-        {colorOpen && (
-          <div className="mt-4 grid grid-cols-3 gap-3">
-            {colorOptions.map((color) => (
-              <button
-                key={color}
-                className="flex items-center justify-center text-gray-600 hover:text-black hover:font-semibold"
-              >
-                <span
-                  className={`w-8 h-8 rounded-full border border-gray-300`}
-                  style={{ backgroundColor: color.toLowerCase() }}
-                ></span>
-              </button>
-            ))}
+          <h3 className="text-md font-semibold text-black">Color</h3>
+          {openSections.color ? (
+            <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+          ) : (
+            <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+          )}
+        </div>
+        {openSections.color && (
+          <div className="flex mt-2 space-x-2">
+            <div className="w-5 h-5 rounded-full bg-black"></div>
+            <div className="w-5 h-5 rounded-full bg-red-500"></div>
+            <div className="w-5 h-5 rounded-full bg-blue-500"></div>
+            <div className="w-5 h-5 rounded-full bg-gray-500"></div>
           </div>
         )}
-                <hr className="border-gray-500 border-1 mt-2 "/>
-
       </div>
 
       {/* Price Filter */}
-      <div>
-        <h3 className="text-lg font-medium text-gray-700">Price</h3>
-        <div className="mt-4 flex flex-col space-y-3">
-          {["Under $50", "$50 - $100", "$100 - $200", "Over $200"].map((price) => (
-            <button
-              key={price}
-              className="text-gray-600 hover:text-black hover:font-semibold"
-            >
-              {price}
-            </button>
-          ))}
+      <div className="mb-6">
+        <div
+          className="flex items-center justify-between cursor-pointer"
+          onClick={() => toggleSection("price")}
+        >
+          <h3 className="text-md font-semibold text-black">Price</h3>
+          {openSections.price ? (
+            <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+          ) : (
+            <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+          )}
         </div>
+        {openSections.price && (
+          <ul className="mt-2 space-y-2 text-sm text-gray-700">
+            <li>Under $50</li>
+            <li>$50 - $100</li>
+            <li>$100 - $200</li>
+            <li>$200+</li>
+          </ul>
+        )}
       </div>
-      <hr className="border-gray-500 border-1 mt-2 "/>
     </div>
   );
 };
