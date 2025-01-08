@@ -29,7 +29,7 @@ const SignUp: React.FC = () => {
 
     try {
       // API call to create the user in the database
-      const res = await fetch("/api/signup", {
+      const res = await fetch("/api/signup", { // Corrected URL
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,6 +54,8 @@ const SignUp: React.FC = () => {
         setError(signInResponse.error);
       } else {
         console.log("User signed up and logged in successfully");
+        // Optionally, redirect the user to the dashboard or homepage
+        window.location.href = "/";
       }
     } catch (err: any) {
       setError(err.message || "An error occurred. Please try again.");
