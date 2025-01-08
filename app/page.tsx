@@ -1,7 +1,7 @@
 // app/page.tsx
 import React from 'react';
-import HeroSection from './components/HomeSection';
-import { Collection } from "../app/types/types"; // Import the type
+import HeroSection from './components/HeroSection';
+import { Collection } from "../app/types/types"; 
 import FeatureCollection from '@/app/components/FeatureCollection';
 import ProductFeature from "./components/ProductFeature";
 import Footer from '@/app/components/Footer';
@@ -10,67 +10,46 @@ const HomePage: React.FC = () => {
   const collections: Collection[] = [
     {
       title: "SHOP ULTRA-LUXE GIFTS",
-      imageUrl: "/assets/holiday/collection1.jpeg", // Update with your actual image URL
+      imageUrl: "/assets/holiday/collection1.jpeg", 
       buttonText: "Shop Now",
     },
     {
       title: "SHOP GIFT UNDER 8000",
-      imageUrl: "/assets/holiday/collection2.jpeg", // Update with your actual image URL
+      imageUrl: "/assets/holiday/collection2.jpeg",
       buttonText: "Shop Now",
     },
     {
       title: "SHOP GIFT BUNDLES",
-      imageUrl: "/assets/holiday/collection3.jpeg", // Update with your actual image URL
+      imageUrl: "/assets/holiday/collection3.jpeg", 
       buttonText: "Shop Now",
     },
     {
       title: "SHOP GIFT FOR HIM",
-      imageUrl: "/assets/holiday/collection4.jpeg", // Update with your actual image URL
+      imageUrl: "/assets/holiday/collection4.jpeg",
       buttonText: "Shop Now",
     },
     {
       title: "SHOP BEST-SELLING GIFTS",
-      imageUrl: "/assets/holiday/collection5.jpeg", // Update with your actual image URL
+      imageUrl: "/assets/holiday/collection5.jpeg", 
       buttonText: "Shop Now",
     },
     {
       title: "SHOP CONVETABLE GIFTS",
-      imageUrl: "/assets/holiday/collection6.jpeg", // Update with your actual image URL
+      imageUrl: "/assets/holiday/collection6.jpeg", 
       buttonText: "Shop Now",
     },
-    // {
-    //   title: "SHOP GIFT CARDS",
-    //   imageUrl: "/assets/holiday/collection7.jpeg", // Update with your actual image URL
-    //   buttonText: "Shop Now",
-    // },
     {
       title: "SHOP LUXE GIFTS",
-      imageUrl: "/assets/holiday/collection8.jpeg", // Update with your actual image URL
+      imageUrl: "/assets/holiday/collection8.jpeg", 
       buttonText: "Shop Now",
     },
     {
       title: "SHOP COZY GIFTS",
-      imageUrl: "/assets/holiday/collection9.jpeg", // Update with your actual image URL
+      imageUrl: "/assets/holiday/collection9.jpeg", 
       buttonText: "Shop Now",
     }
   ];
-  const featuresData = [
-    {
-      imageUrl: "/assets/holiday/collection6.jpeg",
-      heading: "Sustainable Design",
-      description: "Explore our eco-friendly products.",
-      buttonText: "Shop Now",
-      link: "#",
-    },
-    {
-      imageUrl: "/assets/holiday/collection8.jpeg",
-      heading: "Comfort and Style",
-      description: "Designed for everyday wear.",
-      buttonText: "Discover",
-      link: "#",
-    },
-    // Add more items as needed
-  ];
+  
   
   return (
     <>
@@ -106,10 +85,7 @@ const HomePage: React.FC = () => {
   reverse={true} // For normal layout
 />
  <Footer/>
-      {/* Add other sections of the homepage below */}
-      <section>
-        {/* Other content like categories, featured products, etc. */}
-      </section>
+      
     </>
   );
 };

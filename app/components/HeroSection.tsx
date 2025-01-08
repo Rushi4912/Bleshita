@@ -14,7 +14,7 @@ const HeroSection = () => {
         Discover timeless fashion pieces with a perfect blend of modern design and sustainable craftsmanship.
       </p>
       <div className="mt-8">
-        <button className="px-6 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-full hover:bg-indigo-700 transition duration-300">
+        <button  className="px-6 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-full hover:bg-indigo-700 transition duration-300">
           Shop Now
         </button>
       </div>
