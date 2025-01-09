@@ -14,7 +14,7 @@ const HomePage: React.FC = () => {
       buttonText: "Shop Now",
     },
     {
-      title: "SHOP GIFT UNDER 8000",
+      title: "SHOP GIFT UNDER 7000",
       imageUrl: "/assets/holiday/collection2.jpeg",
       buttonText: "Shop Now",
     },
