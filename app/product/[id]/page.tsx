@@ -34,7 +34,6 @@ const ProductPage: React.FC = () => {
           setSelectedColor(data.data.colors[0]); // Default to the first color
           setSelectedSize(data.data.sizes[0]); // Default to the first size
         } else {
-          console.error("Failed to fetch product:", data.error);
         }
       } catch (error) {
         console.error("Error fetching product:", error);
