@@ -43,7 +43,7 @@ const CategoryPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-gray-500 text-lg">Loading products...</p>
+        <p className="text-gray-500 text-lg">Loading products..</p>
       </div>
     );
   }
