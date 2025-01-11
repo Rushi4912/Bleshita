@@ -5,6 +5,8 @@ import { Collection } from "../app/types/types";
 import FeatureCollection from '@/app/components/FeatureCollection';
 import ProductFeature from "./components/ProductFeature";
 import Footer from '@/app/components/Footer';
+import './globals.css';
+
 
 const HomePage: React.FC = () => {
   const collections: Collection[] = [

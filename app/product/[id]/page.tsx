@@ -15,6 +15,7 @@ type Product = {
   modelInfo: string;
 };
 
+
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Ensure type for id is a string
   const [product, setProduct] = useState<Product | null>(null);
