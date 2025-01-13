@@ -20,11 +20,11 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
   const { addToCart } = useCart(); // Access the addToCart function from context
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pr-6">
       {products.map((product) => (
         <div
           key={product.id}
-          className="relative bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300 group cursor-pointer"
+          className="relative bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300 group"
         >
           <Link href={`/products/${product.id}`}>
             {/* Image Section */}
@@ -34,7 +34,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
                 alt={product.name}
                 width={500}
                 height={500}
-                className="w-full h-85 object-cover transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-96 object-cover transition-transform duration-300 group-hover:scale-105"
               />
               {/* Quick Add Button */}
               <button
@@ -48,7 +48,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
                     image: product.imageUrl,
                   });
                 }}
-                className="absolute inset-x-4 bottom-4 mx-auto bg-white text-black text-sm font-medium px-6 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-between shadow-md hover:shadow-lg"
+                className="absolute inset-x-4 bottom-4 mx-auto bg-white text-black text-sm font-medium px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-between shadow-md hover:shadow-lg"
               >
                 <span className="mx-auto">QUICK ADD</span>
                 <svg

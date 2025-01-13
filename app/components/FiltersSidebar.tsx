@@ -10,7 +10,7 @@ interface FiltersSidebarProps {
 
 const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilter }) => {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
-    category: false,
+    category: false, 
     size: false,
     color: false,
     price: false,
@@ -21,14 +21,16 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
   };
 
   return (
-    <div className="p-4">
+    <div className="p-6 bg-white shadow-md  sticky">
+      {/* <h2 className="text-2xl font-bold text-gray-800 mb-6">Filters</h2> */}
+
       {/* Category Filter */}
       <div className="mb-6">
         <div
           className="flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection("category")}
         >
-          <h3 className="text-md font-semibold text-black">Category</h3>
+          <h3 className="text-lg font-semibold text-gray-500">Category</h3>
           {openSections.category ? (
             <ChevronUpIcon className="w-5 h-5 text-gray-600" />
           ) : (
@@ -36,21 +38,42 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           )}
         </div>
         {openSections.category && (
-          <ul className="mt-2 space-y-2 text-sm text-gray-700">
-            <li onClick={() => setFilter("all")} className="cursor-pointer">
+          <ul className="mt-4 space-y-3 text-sm text-gray-700">
+            <li
+              onClick={() => setFilter("all")}
+              className={`cursor-pointer ${
+                currentFilter === "all" ? "font-semibold text-black" : ""
+              } hover:text-black`}
+            >
               All Categories
             </li>
-            <li onClick={() => setFilter("women")} className="cursor-pointer">
+            <li
+              onClick={() => setFilter("women")}
+              className={`cursor-pointer ${
+                currentFilter === "women" ? "font-semibold text-black" : ""
+              } hover:text-black`}
+            >
               Women
             </li>
-            <li onClick={() => setFilter("men")} className="cursor-pointer">
+            <li
+              onClick={() => setFilter("men")}
+              className={`cursor-pointer ${
+                currentFilter === "men" ? "font-semibold text-black" : ""
+              } hover:text-black`}
+            >
               Men
             </li>
-            <li onClick={() => setFilter("new-arrivals")} className="cursor-pointer">
+            <li
+              onClick={() => setFilter("new-arrivals")}
+              className={`cursor-pointer ${
+                currentFilter === "new-arrivals" ? "font-semibold text-black" : ""
+              } hover:text-black`}
+            >
               New Arrivals
             </li>
           </ul>
         )}
+        <hr className="mt-4 border-gray-300" />
       </div>
 
       {/* Size Filter */}
@@ -59,7 +82,7 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           className="flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection("size")}
         >
-          <h3 className="text-md font-semibold text-black">Size</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Size</h3>
           {openSections.size ? (
             <ChevronUpIcon className="w-5 h-5 text-gray-600" />
           ) : (
@@ -67,13 +90,14 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           )}
         </div>
         {openSections.size && (
-          <ul className="mt-2 space-y-2 text-sm text-gray-700">
+          <ul className="mt-4 space-y-3 text-sm text-gray-700">
             <li>S</li>
             <li>M</li>
             <li>L</li>
             <li>XL</li>
           </ul>
         )}
+        <hr className="mt-4 border-gray-300" />
       </div>
 
       {/* Color Filter */}
@@ -82,7 +106,7 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           className="flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection("color")}
         >
-          <h3 className="text-md font-semibold text-black">Color</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Color</h3>
           {openSections.color ? (
             <ChevronUpIcon className="w-5 h-5 text-gray-600" />
           ) : (
@@ -90,13 +114,14 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           )}
         </div>
         {openSections.color && (
-          <div className="flex mt-2 space-x-2">
-            <div className="w-5 h-5 rounded-full bg-black"></div>
-            <div className="w-5 h-5 rounded-full bg-red-500"></div>
-            <div className="w-5 h-5 rounded-full bg-blue-500"></div>
-            <div className="w-5 h-5 rounded-full bg-gray-500"></div>
+          <div className="flex mt-4 space-x-3">
+            <div className="w-5 h-5 rounded-full bg-black border border-gray-300"></div>
+            <div className="w-5 h-5 rounded-full bg-red-500 border border-gray-300"></div>
+            <div className="w-5 h-5 rounded-full bg-blue-500 border border-gray-300"></div>
+            <div className="w-5 h-5 rounded-full bg-gray-500 border border-gray-300"></div>
           </div>
         )}
+        <hr className="mt-4 border-gray-300" />
       </div>
 
       {/* Price Filter */}
@@ -105,7 +130,7 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           className="flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection("price")}
         >
-          <h3 className="text-md font-semibold text-black">Price</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Price</h3>
           {openSections.price ? (
             <ChevronUpIcon className="w-5 h-5 text-gray-600" />
           ) : (
@@ -113,13 +138,14 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           )}
         </div>
         {openSections.price && (
-          <ul className="mt-2 space-y-2 text-sm text-gray-700">
+          <ul className="mt-4 space-y-3 text-sm text-gray-700">
             <li>Under $50</li>
             <li>$50 - $100</li>
             <li>$100 - $200</li>
             <li>$200+</li>
           </ul>
         )}
+        <hr className="mt-4 border-gray-300" />
       </div>
     </div>
   );
