@@ -10,7 +10,7 @@ interface FiltersSidebarProps {
 
 const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilter }) => {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
-    category: false, 
+    category: false,
     size: false,
     color: false,
     price: false,
@@ -21,20 +21,21 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
   };
 
   return (
-    <div className="p-6 bg-white shadow-md  sticky">
-      {/* <h2 className="text-2xl font-bold text-gray-800 mb-6">Filters</h2> */}
+    <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto bg-white shadow-md px-4 py-6">
+      <h2 className="text-md font-semibold text-gray-400">0 Products</h2>
+      <hr className="mt-4 border-gray-300" />
 
       {/* Category Filter */}
-      <div className="mb-6">
+      <div className="mb-6 mt-5">
         <div
           className="flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection("category")}
         >
-          <h3 className="text-lg font-semibold text-gray-500">Category</h3>
+          <h3 className="text-md font-semibold text-gray-700">Category</h3>
           {openSections.category ? (
-            <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+            <ChevronUpIcon className="w-4 h-4 text-gray-600" />
           ) : (
-            <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+            <ChevronDownIcon className="w-4 h-4 text-gray-600" />
           )}
         </div>
         {openSections.category && (
@@ -82,11 +83,11 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           className="flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection("size")}
         >
-          <h3 className="text-lg font-semibold text-gray-700">Size</h3>
+          <h3 className="text-md font-semibold text-gray-700">Size</h3>
           {openSections.size ? (
-            <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+            <ChevronUpIcon className="w-4 h-4 text-gray-600" />
           ) : (
-            <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+            <ChevronDownIcon className="w-4 h-4 text-gray-600" />
           )}
         </div>
         {openSections.size && (
@@ -106,11 +107,11 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           className="flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection("color")}
         >
-          <h3 className="text-lg font-semibold text-gray-700">Color</h3>
+          <h3 className="text-md font-semibold text-gray-700">Color</h3>
           {openSections.color ? (
-            <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+            <ChevronUpIcon className="w-4 h-4 text-gray-600" />
           ) : (
-            <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+            <ChevronDownIcon className="w-4 h-4 text-gray-600" />
           )}
         </div>
         {openSections.color && (
@@ -130,11 +131,11 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           className="flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection("price")}
         >
-          <h3 className="text-lg font-semibold text-gray-700">Price</h3>
+          <h3 className="text-md font-semibold text-gray-700">Price</h3>
           {openSections.price ? (
-            <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+            <ChevronUpIcon className="w-4 h-4 text-gray-600" />
           ) : (
-            <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+            <ChevronDownIcon className="w-4 h-4 text-gray-600" />
           )}
         </div>
         {openSections.price && (

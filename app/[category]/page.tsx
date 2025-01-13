@@ -6,7 +6,7 @@ import ProductGrid from "@/app/components/ProductGrid";
 import FiltersSidebar from "@/app/components/FiltersSidebar";
 
 const CategoryPage: React.FC = () => {
-  const { category } = useParams(); // Dynamic category from the route
+  const { category } = useParams();
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState<string>("all");
   const [showProducts, setShowProducts] = useState(12);
@@ -43,16 +43,18 @@ const CategoryPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-gray-500 text-lg">Loading products..</p>
+        <p className="text-gray-500 text-lg">Loading products...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col lg:flex-row bg-white">
+    <div className="flex bg-white min-h-screen">
       {/* Filters Sidebar */}
-      <aside className="w-full lg:w-1/5 bg-white p-6 sticky top-0">
-        <FiltersSidebar setFilter={setFilter} currentFilter={filter} />
+      <aside className="w-full lg:w-1/5">
+        <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto bg-white">
+          <FiltersSidebar setFilter={setFilter} currentFilter={filter} />
+        </div>
       </aside>
 
       {/* Main Content */}
