@@ -17,7 +17,9 @@ type Product = {
 
 const ProductPage: React.FC = () => {
   const params = useParams();
+  console.log("Route params:", params); // Check all params
   const id = params?.id; // Ensure id is properly retrieved
+  console.log(id);
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
@@ -28,7 +30,8 @@ const ProductPage: React.FC = () => {
       try {
         if (!id) return;
         setLoading(true);
-        const response = await fetch(`/api/products?id=${id}`);
+        // const response = await fetch(`/api/products?id=${id}`);
+        const response = await fetch(`/api/products/id/${id}`);
         const data = await response.json();
 
         if (data.success && data.data) {
@@ -157,3 +160,5 @@ const ProductPage: React.FC = () => {
 };
 
 export default ProductPage;
+
+

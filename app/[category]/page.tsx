@@ -16,7 +16,8 @@ const CategoryPage: React.FC = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/products?category=${category}`);
+        // const response = await fetch(`/api/products?category=${category}`);
+        const response = await fetch(`/api/products/${category}`);
         const data = await response.json();
         if (data.success) {
           setProducts(data.data);
