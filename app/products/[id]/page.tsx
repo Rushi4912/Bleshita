@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import {useParams } from "next/navigation";
 import Image from "next/image";
 import Footer from "@/app/components/Footer";
 
@@ -17,9 +17,9 @@ type Product = {
 
 const ProductPage: React.FC = () => {
   const params = useParams();
-  console.log("Route params:", params); // Check all params
   const id = params?.id; // Ensure id is properly retrieved
-  console.log(id);
+
+  // console.log("Extracted ID using useRouter:", id);
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
@@ -28,18 +28,18 @@ const ProductPage: React.FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        if (!id) return;
+        if (!id) return; // Exit if ID is not available
         setLoading(true);
-        // const response = await fetch(`/api/products?id=${id}`);
+
         const response = await fetch(`/api/products/id/${id}`);
         const data = await response.json();
 
-        if (data.success && data.data) {
+        if (response.ok && data.success) {
           setProduct(data.data);
           setSelectedColor(data.data.colors[0]); // Default to the first color
           setSelectedSize(data.data.sizes[0]); // Default to the first size
         } else {
-          console.error("Failed to fetch product:", data.error);
+          console.error("Error fetching product:", data.error || "Unknown error");
         }
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -160,5 +160,3 @@ const ProductPage: React.FC = () => {
 };
 
 export default ProductPage;
-
-

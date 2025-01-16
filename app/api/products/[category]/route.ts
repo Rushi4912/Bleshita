@@ -7,7 +7,7 @@ import Product from '../../models/product';
 export async function GET(req: NextRequest, { params }: { params: { category: string } }) {
   await dbConnect();
 
-  const { category } = params;
+  const { category } =  params;
 
   if (!category || typeof category !== 'string') {
     return NextResponse.json(
