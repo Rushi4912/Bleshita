@@ -18,8 +18,6 @@ type Product = {
 const ProductPage: React.FC = () => {
   const params = useParams();
   const id = params?.id; // Ensure id is properly retrieved
-
-  console.log("Extracted ID :", id);
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
