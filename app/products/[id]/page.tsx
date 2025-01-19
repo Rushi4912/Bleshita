@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import {useParams } from "next/navigation";
 import Image from "next/image";
 import Footer from "@/app/components/Footer";
+import { useCart } from '@/app/utils/cartContext';
 
 type Product = {
   _id: string;
@@ -13,20 +14,27 @@ type Product = {
   colors: string[];
   sizes: string[];
   modelInfo: string;
+  imageUrl: string;
 };
 
 const ProductPage: React.FC = () => {
-  const params = useParams();
-  const id = Array.isArray(params.id) ? params.id[0] : params.id;
+  const params = useParams<{ id: string }>();
+  const id = params?.id;
+  const { addToCart } = useCart();
 
-  // const params = useParams<{ id: string }>();
-  // const id = params?.id; // Ensure id is properly retrieved
+  // Early return if ID is invalid
+  if (!id || id === 'undefined' || id === 'installHook.js.map') {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500 text-lg">Invalid product ID.</p>
+      </div>
+    );
+  }
+
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-
-  // ... existing code ...
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -36,21 +44,30 @@ const ProductPage: React.FC = () => {
           return;
         }
 
-        // Clean the ID - remove any special characters or whitespace
-        const cleanId = id.trim();
-        console.log("Fetching product with ID:", cleanId); // Debug log
+        // Validate MongoDB ObjectId format (24 characters, hexadecimal)
+        const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+        if (!isValidObjectId) {
+          console.error("Invalid ID format. Expected a 24-character hexadecimal string.");
+          setProduct(null);
+          setLoading(false);
+          return;
+        }
 
-        const response = await fetch(`/api/products/id/${cleanId}`);
+        const apiUrl = `/api/products/id/${id}`;
+        console.log("Fetching from URL:", apiUrl);
+
+        const response = await fetch(apiUrl);
         
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          const errorData = await response.json();
+          console.error("Server error:", errorData);
+          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
         
         const data = await response.json();
-
+        
         if (data.success) {
           setProduct(data.data);
-          // Only set these if the data exists
           if (data.data.colors?.length > 0) {
             setSelectedColor(data.data.colors[0]);
           }
@@ -87,13 +104,17 @@ const ProductPage: React.FC = () => {
     );
   }
 
+  const images = product?.imageGallery?.length > 0 
+    ? product.imageGallery 
+    : [product?.imageUrl];
+
   return (
     <div className="bg-white">
       <div className="flex flex-col md:flex-row items-start gap-6 px-6 md:px-16 py-8">
         {/* Image Gallery */}
         <div className="w-full md:w-2/3">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {product.imageGallery.map((image, index) => (
+            {images.map((image, index) => (
               <Image
                 key={index}
                 src={image}
@@ -112,54 +133,75 @@ const ProductPage: React.FC = () => {
           <p className="text-xl font-medium text-gray-700 mt-2">₹ {product.price}</p>
 
           {/* Color Options */}
-          <div className="flex items-center gap-2 mt-4">
-            <p className="text-gray-600">COLOR:</p>
-            <span className="uppercase text-black font-medium">{selectedColor}</span>
-          </div>
-          <div className="flex gap-2 mt-2">
-            {product.colors.map((color) => (
-              <button
-                key={color}
-                onClick={() => setSelectedColor(color)}
-                className={`w-8 h-8 rounded-full border ${
-                  selectedColor === color ? "border-black" : "border-gray-300"
-                }`}
-                style={{
-                  backgroundColor:
-                    color.toLowerCase() === "black"
-                      ? "#000"
-                      : color.toLowerCase() === "blue"
-                      ? "#1E3A8A"
-                      : "#D1D5DB",
-                }}
-              />
-            ))}
-          </div>
+          {product.colors && product.colors.length > 0 && (
+            <div className="flex items-center gap-2 mt-4">
+              <p className="text-gray-600">COLOR:</p>
+              <span className="uppercase text-black font-medium">{selectedColor}</span>
+            </div>
+          )}
+          {product.colors && product.colors.length > 0 && (
+            <div className="flex gap-2 mt-2">
+              {product.colors.map((color) => (
+                <button
+                  key={color}
+                  onClick={() => setSelectedColor(color)}
+                  className={`w-8 h-8 rounded-full border ${
+                    selectedColor === color ? "border-black" : "border-gray-300"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      color.toLowerCase() === "black"
+                        ? "#000"
+                        : color.toLowerCase() === "blue"
+                        ? "#1E3A8A"
+                        : "#D1D5DB",
+                  }}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Size Options */}
-          <div className="flex items-center gap-2 mt-4">
-            <p className="text-gray-600">SIZE:</p>
-            <span className="uppercase text-black font-medium">{selectedSize}</span>
-          </div>
-          <div className="grid grid-cols-4 gap-2 mt-2">
-            {product.sizes.map((size) => (
-              <button
-                key={size}
-                onClick={() => setSelectedSize(size)}
-                className={`px-4 py-2 border rounded-md ${
-                  selectedSize === size ? "border-black" : "border-gray-300"
-                }`}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="flex items-center gap-2 mt-4">
+              <p className="text-gray-600">SIZE:</p>
+              <span className="uppercase text-black font-medium">{selectedSize}</span>
+            </div>
+          )}
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="grid grid-cols-4 gap-2 mt-2">
+              {product.sizes.map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setSelectedSize(size)}
+                  className={`px-4 py-2 border rounded-md ${
+                    selectedSize === size ? "border-black" : "border-gray-300"
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Model Info */}
           <p className="mt-4 text-sm text-gray-500">{product.modelInfo}</p>
 
           {/* Add to Bag Button */}
-          <button className="w-full mt-6 bg-black text-white py-3 rounded-md font-medium hover:bg-gray-800">
+          <button
+            onClick={() => {
+              addToCart({
+                id: product._id,
+                name: product.name,
+                price: product.price,
+                quantity: 1,
+                image: product.imageUrl,
+                color: selectedColor,
+                size: selectedSize,
+              });
+            }}
+            className="w-full mt-6 bg-black text-white py-3 rounded-md font-medium hover:bg-gray-800"
+          >
             ADD TO BAG
           </button>
 

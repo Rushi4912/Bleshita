@@ -4,35 +4,41 @@ import Product from '../../models/product';
 
 // Handle GET request
 
-export async function GET(req: NextRequest, { params }: { params: { category: string } }) {
-  await dbConnect();
-
-  const { category } =  params;
-
-  if (!category || typeof category !== 'string') {
-    return NextResponse.json(
-      { success: false, error: 'Invalid or missing category parameter' },
-      { status: 400 }
-    );
-  }
-
+export async function GET(
+  request: Request,
+  { params }: { params: { category: string } }
+) {
   try {
-    const products = await Product.find({ category: new RegExp(`^${category}$`, 'i') }).select('-__v');
-    if (products.length === 0) {
-      return NextResponse.json(
-        { success: false, error: `No products found in category: ${category}` },
-        { status: 404 }
-      );
-    }
+    await dbConnect();
+    
+    const { category } = params;
+    
+    // Find products by category (case-insensitive)
+    const products = await Product.find({
+      category: { $regex: new RegExp(category, 'i') }
+    }).lean();
+    
+    const formattedProducts = products.map(product => ({
+      id: product._id.toString(),
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      category: product.category,
+      stock: product.stock,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt
+    }));
 
-    return NextResponse.json({
-      success: true,
-      category,
-      count: products.length,
-      data: products,
+    return NextResponse.json({ 
+      success: true, 
+      data: formattedProducts 
     });
-  } catch (error: any) {
-    console.error('Error fetching products:', error.message);
-    return NextResponse.json({ success: false, error: 'Server error' }, { status: 500 });
+  } catch (error) {
+    console.error('Error fetching products by category:', error);
+    return NextResponse.json(
+      { success: false, error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

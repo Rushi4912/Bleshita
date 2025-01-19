@@ -6,10 +6,14 @@ import Link from 'next/link';
 import { useCart } from '../../app/utils/cartContext'; // Adjust the path to your CartContext
 
 interface Product {
-  id: string; // Ensure id is unique for each product
+  id: string;
   name: string;
   price: number;
   imageUrl: string;
+  imageGallery?: string[];
+  description?: string;
+  category?: string;
+  stock?: number;
 }
 
 interface ProductGridProps {
@@ -17,7 +21,10 @@ interface ProductGridProps {
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
-  const { addToCart } = useCart(); // Access the addToCart function from context
+  const { addToCart } = useCart();
+
+  // Log the full product object to see all available fields
+  console.log("Full product object sample:", products[0]);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pr-6">
@@ -26,8 +33,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
           key={product.id}
           className="relative bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300 group"
         >
-          <Link href={`/products/${product.id}`}>
-            {/* Image Section */}
+          {/* Wrap the image in a Link component */}
+          <Link href={`/products/${product.id}`} className="block relative overflow-hidden">
             <div className="relative overflow-hidden">
               <Image
                 src={product.imageUrl}
@@ -36,19 +43,19 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
                 height={500}
                 className="w-full h-96 object-cover transition-transform duration-300 group-hover:scale-105"
               />
-              {/* Quick Add Button */}
               <button
                 onClick={(e) => {
-                  e.preventDefault(); // Prevent navigation when clicking Quick Add
+                  e.preventDefault(); // Prevent navigation when clicking the button
+                  e.stopPropagation(); // Prevent event bubbling
                   addToCart({
-                    id: product.id, // Ensure consistent id handling
+                    id: product.id, // Use the actual product ID now
                     name: product.name,
                     price: product.price,
-                    quantity: 1, // Always add with quantity 1 for new product
+                    quantity: 1,
                     image: product.imageUrl,
                   });
                 }}
-                className="absolute inset-x-4 bottom-4 mx-auto bg-white text-black text-sm font-medium px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-between shadow-md hover:shadow-lg"
+                className="absolute inset-x-4 bottom-4 mx-auto bg-white text-black text-sm font-medium px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-between shadow-md hover:shadow-lg z-10"
               >
                 <span className="mx-auto">QUICK ADD</span>
                 <svg
@@ -69,13 +76,15 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
             </div>
           </Link>
 
-          {/* Product Info */}
-          <div className="p-4 text-center bg-white">
-            <h2 className="text-sm font-semibold text-gray-900 truncate">
-              {product.name}
-            </h2>
-            <p className="text-gray-600 mt-1">${product.price.toFixed(2)}</p>
-          </div>
+          {/* Product Info - Also wrapped in Link for better UX */}
+          <Link href={`/products/${product.id}`}>
+            <div className="p-4 text-center bg-white">
+              <h2 className="text-sm font-semibold text-gray-900 truncate">
+                {product.name}
+              </h2>
+              <p className="text-gray-600 mt-1">${product.price.toFixed(2)}</p>
+            </div>
+          </Link>
         </div>
       ))}
     </div>
