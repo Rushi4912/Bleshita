@@ -17,30 +17,52 @@ type Product = {
 
 const ProductPage: React.FC = () => {
   const params = useParams();
-  const id = params?.id; // Ensure id is properly retrieved
+  const id = Array.isArray(params.id) ? params.id[0] : params.id;
+
+  // const params = useParams<{ id: string }>();
+  // const id = params?.id; // Ensure id is properly retrieved
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
+  // ... existing code ...
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        if (!id) return; // Exit if ID is not available
-        setLoading(true);
+        if (!id) {
+          console.error("No ID provided");
+          return;
+        }
 
-        const response = await fetch(`/api/products/id/${id}`);
+        // Clean the ID - remove any special characters or whitespace
+        const cleanId = id.trim();
+        console.log("Fetching product with ID:", cleanId); // Debug log
+
+        const response = await fetch(`/api/products/id/${cleanId}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
 
-        if (response.ok && data.success) {
+        if (data.success) {
           setProduct(data.data);
-          setSelectedColor(data.data.colors[0]); // Default to the first color
-          setSelectedSize(data.data.sizes[0]); // Default to the first size
+          // Only set these if the data exists
+          if (data.data.colors?.length > 0) {
+            setSelectedColor(data.data.colors[0]);
+          }
+          if (data.data.sizes?.length > 0) {
+            setSelectedSize(data.data.sizes[0]);
+          }
         } else {
-          console.error("Error fetching product:", data.error || "Unknown error");
+          throw new Error(data.error || "Failed to fetch product");
         }
       } catch (error) {
         console.error("Error fetching product:", error);
+        setProduct(null);
       } finally {
         setLoading(false);
       }
