@@ -21,9 +21,9 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
   };
 
   return (
-    <div className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto bg-white shadow-lg px-8 py-6 ml-4 z-30">
+    <div className="bg-white py-6">
       <h2 className="text-base font-light text-gray-400">0 Products</h2>
-      <hr className="mt-3 border-gray-200" />
+      <hr className="my-3 border-gray-200" />
 
       {/* Category Filter */}
       <div className="mb-6 mt-4">

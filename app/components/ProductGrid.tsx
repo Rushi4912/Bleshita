@@ -27,62 +27,65 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
   console.log("Full product object sample:", products[0]);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pr-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {products.map((product) => (
-        <div
-          key={product.id}
-          className="relative bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300 group"
-        >
-          {/* Wrap the image in a Link component */}
-          <Link href={`/products/${product.id}`} className="block relative overflow-hidden">
-            <div className="relative overflow-hidden">
+        <div key={product.id} className="group">
+          {/* Image Container */}
+          <div className="relative h-[400px] mb-4 bg-gray-50">
+            <Link href={`/products/${product.id}`}>
               <Image
                 src={product.imageUrl}
                 alt={product.name}
-                width={500}
-                height={500}
-                className="w-full h-96 object-cover transition-transform duration-300 group-hover:scale-105"
+                width={400}
+                height={400}
+                className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
               />
-              <button
-                onClick={(e) => {
-                  e.preventDefault(); // Prevent navigation when clicking the button
-                  e.stopPropagation(); // Prevent event bubbling
-                  addToCart({
-                    id: product.id, // Use the actual product ID now
-                    name: product.name,
-                    price: product.price,
-                    quantity: 1,
-                    image: product.imageUrl,
-                  });
-                }}
-                className="absolute inset-x-4 bottom-4 mx-auto bg-white text-black text-sm font-medium px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-between shadow-md hover:shadow-lg z-10"
+            </Link>
+            
+            {/* Quick Add Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                addToCart({
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  quantity: 1,
+                  image: product.imageUrl,
+                });
+              }}
+              className="absolute inset-x-4 bottom-4 mx-auto bg-white text-black text-sm font-medium px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-between shadow-md hover:shadow-lg z-10"
+            >
+              <span className="mx-auto">QUICK ADD</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-4 h-4 ml-auto"
               >
-                <span className="mx-auto">QUICK ADD</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-4 h-4 ml-auto"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 4.5v15m7.5-7.5h-15"
-                  />
-                </svg>
-              </button>
-            </div>
-          </Link>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </button>
+          </div>
 
-          {/* Product Info - Also wrapped in Link for better UX */}
+          {/* Product Info */}
           <Link href={`/products/${product.id}`}>
-            <div className="p-4 text-center bg-white">
-              <h2 className="text-sm font-semibold text-gray-900 truncate">
+            <div className="space-y-2">
+              <h3 className="text-sm font-normal text-gray-700 tracking-wide">
                 {product.name}
-              </h2>
-              <p className="text-gray-600 mt-1">${product.price.toFixed(2)}</p>
+              </h3>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-900">
+                  ${product.price.toFixed(2)}
+                </span>
+              </div>
             </div>
           </Link>
         </div>
