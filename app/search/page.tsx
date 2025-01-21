@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { AiOutlineSearch } from "react-icons/ai";
+import FiltersSidebar from '../components/FiltersSidebar';
+import ProductGrid from '../components/ProductGrid';
 
 interface Product {
   id: string;
@@ -18,6 +20,8 @@ export default function SearchPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<string>("all");
+  const [showProducts, setShowProducts] = useState(12);
 
   // Debounce search query to avoid too many API calls
   useEffect(() => {
@@ -27,7 +31,7 @@ export default function SearchPage() {
       } else {
         setProducts([]);
       }
-    }, 500); // Wait 500ms after user stops typing
+    }, 600); // Wait 500ms after user stops typing
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
@@ -50,6 +54,10 @@ export default function SearchPage() {
     }
   };
 
+  const filteredProducts = filter === "all"
+    ? products
+    : products.filter((product) => product.category.toLowerCase() === filter.toLowerCase());
+
   return (
     <div className="min-h-screen bg-white">
       {/* Search Bar Section */}
@@ -68,48 +76,48 @@ export default function SearchPage() {
         </div>
       </div>
 
-      {/* Search Results */}
-      <div className="max-w-7xl mx-auto px-4 mt-6">
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-12">
-            <p className="text-gray-500">Loading...</p>
-          </div>
+      <div className="min-h-screen bg-white">
+        {/* Filters Sidebar - Only show when products exist and not loading */}
+        {!loading && filteredProducts.length > 0 && (
+          <aside className="fixed left-0 top-[180px] hidden lg:block w-72 h-[calc(100vh-180px)] overflow-y-auto">
+            <div className="sticky top-0 pl-12">
+              <FiltersSidebar setFilter={setFilter} currentFilter={filter} />
+            </div>
+          </aside>
         )}
 
-        {/* Error State */}
-        {error && (
-          <div className="text-center py-12">
-            <p className="text-red-500">{error}</p>
-          </div>
-        )}
-
-        {/* No Results */}
-        {!loading && !error && products.length === 0 && searchQuery && (
-          <div className="text-center py-12">
-            <p className="text-gray-500">No products found</p>
-          </div>
-        )}
-
-        {/* Results Grid */}
-        {!loading && !error && products.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <div key={product.id} className="bg-white border border-gray-100 rounded-md p-4 transition-shadow hover:shadow-md">
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="w-full h-48 object-cover rounded-md"
-                />
-                <h3 className="mt-4 text-lg font-medium text-gray-800">{product.name}</h3>
-                <p className="text-gray-500 text-sm">{product.category}</p>
-                <p className="mt-2 text-gray-900 font-semibold">
-                  ${product.price.toFixed(2)}
-                </p>
+        {/* Main Content - Adjust margin only when sidebar is visible */}
+        <main className={`${!loading && filteredProducts.length > 0 ? 'lg:ml-72' : ''}`}>
+          <div className="max-w-7xl mx-auto px-6 py-8">
+            {loading ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Loading...</p>
               </div>
-            ))}
+            ) : error ? (
+              <div className="text-center py-12">
+                <p className="text-red-500">{error}</p>
+              </div>
+            ) : filteredProducts.length === 0 && searchQuery ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500">No products found</p>
+              </div>
+            ) : filteredProducts.length > 0 ? (
+              <>
+                <ProductGrid products={filteredProducts.slice(0, showProducts)} />
+                {filteredProducts.length > showProducts && (
+                  <div className="mt-8 text-center">
+                    <button
+                      onClick={() => setShowProducts((prev) => prev + 12)}
+                      className="px-6 py-3 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
+                    >
+                      Load More
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : null}
           </div>
-        )}
+        </main>
       </div>
     </div>
   );

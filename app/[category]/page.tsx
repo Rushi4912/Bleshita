@@ -87,44 +87,51 @@ const CategoryPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Filters Sidebar */}
-      <aside className="fixed left-0 top-16 hidden lg:block w-72 h-[calc(100vh-64px)] overflow-y-auto">
-        <div className="sticky top-0 pl-12">
-          <FiltersSidebar setFilter={setFilter} currentFilter={filter} />
+      <div className="min-h-screen bg-white">
+        {/* Header Section */}
+        <div className="lg:ml-72">
+          <div className="max-w-7xl mx-auto px-6 pt-8">
+            <header className="mb-8">
+              <h1 className="text-3xl font-semibold capitalize">
+                {Array.isArray(category) ? category[0] : category}
+              </h1>
+              <p className="mt-2 text-gray-600">
+                Discover our latest {Array.isArray(category) ? category[0] : category} collection, curated for style and comfort.
+              </p>
+            </header>
+          </div>
         </div>
-      </aside>
 
-      {/* Main Content */}
-      <main className="lg:ml-72">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <header className="mb-8">
-            <h1 className="text-3xl font-semibold capitalize">
-              {Array.isArray(category) ? category[0] : category}
-            </h1>
-            <p className="mt-2 text-gray-600">
-              Discover our latest {Array.isArray(category) ? category[0] : category} collection, curated for style and comfort.
-            </p>
-          </header>
+        {/* Filters Sidebar */}
+        <aside className="fixed left-0 top-16 hidden lg:block w-72">
+          <div className="pl-12 pt-6">
+            <FiltersSidebar setFilter={setFilter} currentFilter={filter} />
+          </div>
+        </aside>
 
-          {filteredProducts.length > 0 ? (
-            <>
-              <ProductGrid products={filteredProducts.slice(0, showProducts)} />
-              {filteredProducts.length > showProducts && (
-                <div className="mt-8 text-center">
-                  <button
-                    onClick={() => setShowProducts((prev) => prev + 12)}
-                    className="px-6 py-3 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
-                  >
-                    Load More
-                  </button>
-                </div>
-              )}
-            </>
-          ) : (
-            <p className="text-center text-gray-500">No products found in this category.</p>
-          )}
-        </div>
-      </main>
+        {/* Main Content */}
+        <main className="lg:ml-72">
+          <div className="max-w-7xl mx-auto px-6">
+            {filteredProducts.length > 0 ? (
+              <>
+                <ProductGrid products={filteredProducts.slice(0, showProducts)} />
+                {filteredProducts.length > showProducts && (
+                  <div className="mt-8 text-center">
+                    <button
+                      onClick={() => setShowProducts((prev) => prev + 12)}
+                      className="px-6 py-3 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
+                    >
+                      Load More
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="text-center text-gray-500">No products found in this category.</p>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
