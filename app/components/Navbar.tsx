@@ -6,6 +6,7 @@ import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineUser } from "react-ico
 import Link from "next/link";
 import { useCart } from "../../app/utils/cartContext";
 import CartSidebar from "../../app/components/CartSidebar";
+import { useRouter } from 'next/navigation';
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,6 +14,7 @@ const Navbar: React.FC = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false); // State for Sign In/Sign Up dropdown
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown element
   const { cartItems } = useCart(); // Access cart items from context
+  const router = useRouter();
 
   const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
   const toggleCart = () => setCartOpen(!isCartOpen);
@@ -23,6 +25,10 @@ const Navbar: React.FC = () => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setDropdownOpen(false);
     }
+  };
+
+  const handleSearchClick = () => {
+    router.push('/search');
   };
 
   useEffect(() => {
@@ -77,8 +83,11 @@ const Navbar: React.FC = () => {
 
           {/* Right: Search, Sign In/Sign Up, and Cart Icons */}
           <div className="flex items-center space-x-6 relative">
-            {/* Search Icon */}
-            <AiOutlineSearch className="text-gray-700 hover:text-black w-5 h-5 cursor-pointer" />
+            {/* Search Icon - Updated with onClick handler */}
+            <AiOutlineSearch 
+              className="text-gray-700 hover:text-black w-5 h-5 cursor-pointer" 
+              onClick={handleSearchClick}
+            />
 
             {/* Sign In/Sign Up Icon */}
             <div className="relative" ref={dropdownRef}>

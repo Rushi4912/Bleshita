@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '../../utils/mongodb';
-import Product from '../models/product';
+import clientPromise from '../../utils/mongodb';
 
 export async function GET() {
   try {
-    await dbConnect();
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB_NAME);
     
-    const products = await Product.find({}).lean();
+    const products = await db.collection('products').find({}).toArray();
     
-    // Transform the products to ensure IDs are properly formatted
     const formattedProducts = products.map(product => ({
       id: product._id.toString(),
       name: product.name,
@@ -20,9 +19,6 @@ export async function GET() {
       createdAt: product.createdAt,
       updatedAt: product.updatedAt
     }));
-
-    // Debug log to see what's being sent
-    console.log('Formatted products sample:', formattedProducts[0]);
 
     return NextResponse.json({ 
       success: true, 
@@ -39,27 +35,20 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    await dbConnect();
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB_NAME);
 
     const body = await req.json();
-    const newProduct = await Product.create(body);
+    const result = await db.collection('products').insertOne(body);
     
-    // Format the response to match GET response structure
-    const formattedProduct = {
-      id: newProduct._id.toString(),
-      name: newProduct.name,
-      description: newProduct.description,
-      price: newProduct.price,
-      imageUrl: newProduct.imageUrl,
-      category: newProduct.category,
-      stock: newProduct.stock,
-      createdAt: newProduct.createdAt,
-      updatedAt: newProduct.updatedAt
+    const newProduct = {
+      id: result.insertedId.toString(),
+      ...body
     };
 
     return NextResponse.json({ 
       success: true, 
-      data: formattedProduct 
+      data: newProduct 
     }, { status: 201 });
   } catch (error) {
     console.error('Error creating product:', error);
