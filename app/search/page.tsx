@@ -83,7 +83,7 @@ export default function SearchPage() {
           )}
 
           {/* Main Content Container */}
-          <main className={`w-full ${!loading && filteredProducts.length > 0 ? 'lg:pl-72' : ''}`}>
+          <main className={`w-full ${!loading && filteredProducts.length > 0 ? 'lg:pl-60' : ''}`}>
             <div className="max-w-7xl mx-auto px-6 pb-16 pt-4">
               {loading ? (
                 <div className="text-center py-12">

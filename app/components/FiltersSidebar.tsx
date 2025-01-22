@@ -10,7 +10,7 @@ interface FiltersSidebarProps {
 
 const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilter }) => {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
-    category: true,
+    category: false,
     size: false,
     color: false,
     price: false,
@@ -22,8 +22,9 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
 
   return (
     <div className="bg-white h-full shadow-sm rounded-lg p-6">
+      
       <h2 className="text-sm font-light text-gray-400 mb-4">0 Products</h2>
-
+      <div className="border-t border-gray-200 mt-4 mb-4"></div>
       {/* Category Filter */}
       <div className="mb-6">
         <div
@@ -53,6 +54,8 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           </ul>
         )}
       </div>
+      <div className="border-t border-gray-200 mt-4 mb-4"></div>
+
 
       {/* Size Filter */}
       <div className="mb-6">
@@ -80,6 +83,8 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           </div>
         )}
       </div>
+      <div className="border-t border-gray-200 mt-4 mb-4"></div>
+
 
       {/* Color Filter */}
       <div className="mb-6">
@@ -117,6 +122,8 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           </div>
         )}
       </div>
+      <div className="border-t border-gray-200 mt-4 mb-4"></div>
+
 
       {/* Price Filter */}
       <div className="mb-6">
@@ -141,6 +148,8 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
           </ul>
         )}
       </div>
+      <div className="border-t border-gray-200 mt-4 mb-4"></div>
+
     </div>
   );
 };

@@ -96,7 +96,7 @@ const CategoryPage: React.FC = () => {
           </aside>
 
           {/* Main Content Container */}
-          <main className="w-full lg:pl-72">
+          <main className="w-full lg:pl-60">
             {/* Header Section */}
             <div className="max-w-7xl mx-auto px-6 pt-6">
               <header className="mb-8">
