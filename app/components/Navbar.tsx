@@ -44,14 +44,14 @@ const Navbar: React.FC = () => {
   }, [isDropdownOpen]);
 
   return (
-    <header className="bg-white shadow-md w-full top-0 z-50 sticky">
-      {/* Banner */}
-      <div className="bg-indigo-600 text-white text-center py-2">
+    <header className="bg-white shadow-md w-full top-0 z-50 fixed">
+      {/* Banner - h-8 */}
+      <div className="bg-indigo-600 text-white text-center py-2 h-8">
         <p className="text-sm">🎁 Holiday Sale: Get 25% Off Sitewide! Use code HOLIDAY25 🎁</p>
       </div>
 
-      {/* Main Navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      {/* Main Navbar - h-16 */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 h-16">
         <div className="flex justify-between items-center">
           {/* Hamburger Menu for Mobile */}
           <button className="md:hidden text-gray-700" onClick={toggleMobileMenu}>
@@ -140,8 +140,8 @@ const Navbar: React.FC = () => {
       {/* Separator Line */}
       <div className="border-t border-gray-200" />
 
-      {/* Categories Navbar */}
-      <div className="bg-gray-100 py-2 hidden md:block">
+      {/* Categories Navbar - h-10 */}
+      <div className="bg-gray-100 py-2.5 hidden md:block h-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center space-x-8">
             <Link href="/holiday-gifting" className="text-sm font-medium text-gray-600 hover:text-gray-900 hover:underline">

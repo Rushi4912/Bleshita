@@ -87,50 +87,50 @@ const CategoryPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="min-h-screen bg-white">
-        {/* Header Section */}
-        <div className="lg:ml-72">
-          <div className="max-w-7xl mx-auto px-6 pt-8">
-            <header className="mb-8">
-              <h1 className="text-3xl font-semibold capitalize">
-                {Array.isArray(category) ? category[0] : category}
-              </h1>
-              <p className="mt-2 text-gray-600">
-                Discover our latest {Array.isArray(category) ? category[0] : category} collection, curated for style and comfort.
-              </p>
-            </header>
-          </div>
-        </div>
-
-        {/* Filters Sidebar */}
-        <aside className="fixed left-0 top-16 hidden lg:block w-72">
-          <div className="pl-12 pt-6">
+      {/* Total navbar height is 8 + 16 + 10 = 34 (136px) */}
+      <div className="pt-[136px]"> {/* This accounts for the fixed navbar */}
+        <div className="flex">
+          {/* Filters Sidebar */}
+          <aside className="hidden lg:block w-56 fixed top-[136px] left-8 h-[calc(100vh-136px)] overflow-y-auto bg-white z-[40] shadow-sm rounded-lg">
             <FiltersSidebar setFilter={setFilter} currentFilter={filter} />
-          </div>
-        </aside>
+          </aside>
 
-        {/* Main Content */}
-        <main className="lg:ml-72">
-          <div className="max-w-7xl mx-auto px-6">
-            {filteredProducts.length > 0 ? (
-              <>
-                <ProductGrid products={filteredProducts.slice(0, showProducts)} />
-                {filteredProducts.length > showProducts && (
-                  <div className="mt-8 text-center">
-                    <button
-                      onClick={() => setShowProducts((prev) => prev + 12)}
-                      className="px-6 py-3 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
-                    >
-                      Load More
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <p className="text-center text-gray-500">No products found in this category.</p>
-            )}
-          </div>
-        </main>
+          {/* Main Content Container */}
+          <main className="w-full lg:pl-72">
+            {/* Header Section */}
+            <div className="max-w-7xl mx-auto px-6 pt-6">
+              <header className="mb-8">
+                <h1 className="text-3xl font-semibold capitalize">
+                  {Array.isArray(category) ? category[0] : category}
+                </h1>
+                <p className="mt-2 text-gray-600">
+                  Discover our latest {Array.isArray(category) ? category[0] : category} collection, curated for style and comfort.
+                </p>
+              </header>
+            </div>
+
+            {/* Products Section */}
+            <div className="max-w-7xl mx-auto px-6 pb-16">
+              {filteredProducts.length > 0 ? (
+                <>
+                  <ProductGrid products={filteredProducts.slice(0, showProducts)} />
+                  {filteredProducts.length > showProducts && (
+                    <div className="mt-8 text-center">
+                      <button
+                        onClick={() => setShowProducts((prev) => prev + 12)}
+                        className="px-6 py-3 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
+                      >
+                        Load More
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="text-center text-gray-500">No products found in this category.</p>
+              )}
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );
