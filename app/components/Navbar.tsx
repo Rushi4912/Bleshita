@@ -134,6 +134,85 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden">
+          <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-50 overflow-y-auto">
+            {/* Close button */}
+            <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+              <span className="font-semibold">Menu</span>
+              <button 
+                onClick={toggleMobileMenu}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Mobile Navigation Links */}
+            <nav className="px-4 py-2">
+              {/* Main Categories */}
+              <div className="py-2 border-b border-gray-200">
+                <Link 
+                  href="/women" 
+                  className="block py-2 text-gray-700 hover:text-black"
+                  onClick={toggleMobileMenu}
+                >
+                  Women
+                </Link>
+                <Link 
+                  href="/men" 
+                  className="block py-2 text-gray-700 hover:text-black"
+                  onClick={toggleMobileMenu}
+                >
+                  Men
+                </Link>
+                <Link 
+                  href="/new-arrivals" 
+                  className="block py-2 text-gray-700 hover:text-black"
+                  onClick={toggleMobileMenu}
+                >
+                  New Arrivals
+                </Link>
+                <Link 
+                  href="/about" 
+                  className="block py-2 text-gray-700 hover:text-black"
+                  onClick={toggleMobileMenu}
+                >
+                  About
+                </Link>
+              </div>
+
+              {/* Shop Categories */}
+              <div className="py-2">
+                <h3 className="text-sm font-semibold text-gray-900 py-2">Shop Categories</h3>
+                {[
+                  ['Holiday Gifting', '/holiday-gifting'],
+                  ['New Arrivals', '/new-arrivals'],
+                  ['Cult Favourites', '/cult-favourites'],
+                  ['Pants', '/pants'],
+                  ['Jeans', '/jeans'],
+                  ['Tees', '/tees'],
+                  ['Sweaters', '/sweaters'],
+                  ['Outerwear', '/outerwear'],
+                  ['Shoes', '/shoes'],
+                  ['Accessories', '/accessories'],
+                ].map(([title, href]) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="block py-2 text-gray-600 hover:text-gray-900"
+                    onClick={toggleMobileMenu}
+                  >
+                    {title}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+          </div>
+        </div>
+      )}
+
       {/* Cart Drawer */}
       <CartSidebar isOpen={isCartOpen} onClose={toggleCart} />
 

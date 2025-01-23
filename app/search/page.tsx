@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { AiOutlineSearch } from "react-icons/ai";
 import FiltersSidebar from '../components/FiltersSidebar';
 import ProductGrid from '../components/ProductGrid';
+import MobileFilters from '@/app/components/MobileFilters';
+import { FiFilter } from 'react-icons/fi';
 
 interface Product {
   id: string;
@@ -22,6 +24,7 @@ export default function SearchPage() {
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("all");
   const [showProducts, setShowProducts] = useState(12);
+  const [isMobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -73,6 +76,28 @@ export default function SearchPage() {
             <AiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           </div>
         </div>
+
+        {/* Mobile Filters Header */}
+        <div className="lg:hidden flex justify-between items-center px-4 py-3 border-b border-gray-200">
+          <button
+            onClick={() => setMobileFiltersOpen(true)}
+            className="flex items-center text-gray-700"
+          >
+            <span className="mr-2">Filters</span>
+            <FiFilter size={20} />
+          </button>
+          <span className="text-gray-500">
+            {filteredProducts.length} Products
+          </span>
+        </div>
+
+        {/* Mobile Filters Modal */}
+        <MobileFilters
+          isOpen={isMobileFiltersOpen}
+          onClose={() => setMobileFiltersOpen(false)}
+          setFilter={setFilter}
+          currentFilter={filter}
+        />
 
         <div className="flex">
           {/* Filters Sidebar */}

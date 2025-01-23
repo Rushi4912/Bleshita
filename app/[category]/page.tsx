@@ -5,6 +5,8 @@ import { useParams } from "next/navigation";
 import ProductGrid from "@/app/components/ProductGrid";
 import FiltersSidebar from "@/app/components/FiltersSidebar";
 import ProductCard from "../components/ProductCard";
+import MobileFilters from '@/app/components/MobileFilters';
+import { FiFilter } from 'react-icons/fi';
 
 interface Product {
   id: string;
@@ -25,6 +27,7 @@ const CategoryPage: React.FC = () => {
   const [showProducts, setShowProducts] = useState(12);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isMobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -89,6 +92,28 @@ const CategoryPage: React.FC = () => {
     <div className="min-h-screen bg-white">
       {/* Total navbar height is 8 + 16 + 10 = 34 (136px) */}
       <div className="pt-[136px]"> {/* This accounts for the fixed navbar */}
+        {/* Mobile Filters Header */}
+        <div className="lg:hidden flex justify-between items-center px-4 py-3 border-b border-gray-200">
+          <button
+            onClick={() => setMobileFiltersOpen(true)}
+            className="flex items-center text-gray-700"
+          >
+            <span className="mr-2">Filters</span>
+            <FiFilter size={20} />
+          </button>
+          <span className="text-gray-500">
+            {filteredProducts.length} Products
+          </span>
+        </div>
+
+        {/* Mobile Filters Modal */}
+        <MobileFilters
+          isOpen={isMobileFiltersOpen}
+          onClose={() => setMobileFiltersOpen(false)}
+          setFilter={setFilter}
+          currentFilter={filter}
+        />
+
         <div className="flex">
           {/* Filters Sidebar */}
           <aside className="hidden lg:block w-56 fixed top-[136px] left-8 h-[calc(100vh-136px)] overflow-y-auto bg-white z-[40] shadow-sm rounded-lg">
