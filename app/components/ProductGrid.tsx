@@ -27,22 +27,22 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
   console.log("Full product object sample:", products[0]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-1 sm:gap-6">
       {products.map((product) => (
         <div key={product.id} className="group">
           {/* Image Container */}
-          <div className="relative h-[400px] mb-4 bg-gray-50">
+          <div className="relative h-[250px] sm:h-[300px] md:h-[400px] mb-2 sm:mb-4 bg-gray-50">
             <Link href={`/products/${product.id}`}>
               <Image
                 src={product.imageUrl}
                 alt={product.name}
                 width={400}
                 height={400}
-                className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full object-cover object-center sm:transition-transform sm:duration-300 sm:group-hover:scale-105"
               />
             </Link>
             
-            {/* Quick Add Button */}
+            {/* Quick Add Button - Hidden on mobile */}
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -55,7 +55,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
                   image: product.imageUrl,
                 });
               }}
-              className="absolute inset-x-4 bottom-4 mx-auto bg-white text-black text-sm font-medium px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-between shadow-md hover:shadow-lg z-10"
+              className="absolute inset-x-4 bottom-4 mx-auto bg-white text-black text-sm font-medium px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:flex items-center justify-between shadow-md hover:shadow-lg z-10"
             >
               <span className="mx-auto">QUICK ADD</span>
               <svg
@@ -77,12 +77,12 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
 
           {/* Product Info */}
           <Link href={`/products/${product.id}`}>
-            <div className="space-y-2">
-              <h3 className="text-sm font-normal text-gray-700 tracking-wide">
+            <div className="space-y-1 sm:space-y-2 px-2">
+              <h3 className="text-xs sm:text-sm font-normal text-gray-700 tracking-wide line-clamp-2">
                 {product.name}
               </h3>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-xs sm:text-sm font-medium text-gray-900">
                   ${product.price.toFixed(2)}
                 </span>
               </div>

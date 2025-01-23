@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ProductGrid from "@/app/components/ProductGrid";
-import FiltersSidebar from "@/app/components/FiltersSidebar";
-import ProductCard from "../components/ProductCard";
+import Filters from "../components/Filters";
 import MobileFilters from '@/app/components/MobileFilters';
 import { FiFilter } from 'react-icons/fi';
 
@@ -117,7 +116,7 @@ const CategoryPage: React.FC = () => {
         <div className="flex">
           {/* Filters Sidebar */}
           <aside className="hidden lg:block w-56 fixed top-[136px] left-8 h-[calc(100vh-136px)] overflow-y-auto bg-white z-[40] shadow-sm rounded-lg">
-            <FiltersSidebar setFilter={setFilter} currentFilter={filter} />
+            <Filters setFilter={setFilter} currentFilter={filter} />
           </aside>
 
           {/* Main Content Container */}
@@ -128,14 +127,14 @@ const CategoryPage: React.FC = () => {
                 <h1 className="text-3xl font-semibold capitalize">
                   {Array.isArray(category) ? category[0] : category}
                 </h1>
-                <p className="mt-2 text-gray-600">
+                <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
                   Discover our latest {Array.isArray(category) ? category[0] : category} collection, curated for style and comfort.
                 </p>
               </header>
             </div>
 
             {/* Products Section */}
-            <div className="max-w-7xl mx-auto px-6 pb-16">
+            <div className="max-w-7xl mx-auto px-0 sm:px-6 pb-16">
               {filteredProducts.length > 0 ? (
                 <>
                   <ProductGrid products={filteredProducts.slice(0, showProducts)} />

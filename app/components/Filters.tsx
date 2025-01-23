@@ -3,12 +3,12 @@
 import React, { useState } from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 
-interface FiltersSidebarProps {
+interface FiltersProps {
   setFilter: (filter: string) => void;
   currentFilter: string;
 }
 
-const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilter }) => {
+const Filters: React.FC<FiltersProps> = ({ setFilter, currentFilter }) => {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
     category: false,
     size: false,
@@ -154,4 +154,4 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({ setFilter, currentFilte
   );
 };
 
-export default FiltersSidebar;
+export default Filters;
