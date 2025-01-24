@@ -1,5 +1,6 @@
 // Footer.tsx
 import React from "react";
+import Link from "next/link";
 import {
   FaFacebookF,
   FaTwitter,
@@ -87,7 +88,10 @@ const Footer: React.FC = () => {
             {/* Legal Links */}
             <div className="text-sm text-gray-600 space-x-6">
               <a href="#" className="hover:underline">Terms of Service</a>
-              <a href="#" className="hover:underline">Privacy Policy</a>
+              {/* <a href="#" className="hover:underline">Privacy Policy</a> */}
+             <Link href="/privacy-policy" className="hover:text-gray-500">
+  Privacy Policy
+</Link>
               <a href="#" className="hover:underline">Accessibility</a>
             </div>
 
