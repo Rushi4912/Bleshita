@@ -18,6 +18,15 @@ type Product = {
   modelInfo: string;
 };
 
+// Add new types for reviews
+type Review = {
+  id: string;
+  userName: string;
+  rating: number;
+  comment: string;
+  date: string;
+};
+
 const ProductPage: React.FC = () => {
   const params = useParams<{ id: string }>();
   const id = params?.id;
@@ -129,6 +138,27 @@ const ProductPage: React.FC = () => {
 
   const displayImages = parseImageGallery(product);
 
+  // Add dummy reviews (replace with actual reviews from your database)
+  const reviews: Review[] = [
+    {
+      id: '1',
+      userName: 'Sarah M.',
+      rating: 5,
+      comment: 'Perfect fit and great quality! Highly recommend.',
+      date: '2024-01-15'
+    },
+    {
+      id: '2',
+      userName: 'Michael R.',
+      rating: 4,
+      comment: 'Good product, shipping was fast.',
+      date: '2024-01-10'
+    },
+    // Add more reviews as needed
+  ];
+
+  const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+
   return (
     <div className="bg-white">
       <div className="pt-[136px]">
@@ -234,6 +264,70 @@ const ProductPage: React.FC = () => {
               <p>Reduced rate express shipping on orders over ₹15000.</p>
               <p className="mt-4 font-bold">Holiday Returns</p>
               <p>Return within 45 days of purchase. Duties & taxes are non-refundable.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="px-6 md:px-16 py-8 border-t border-gray-200">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Customer Reviews</h2>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <svg
+                      key={star}
+                      className={`w-5 h-5 ${
+                        star <= averageRating ? 'text-yellow-400' : 'text-gray-300'
+                      }`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <span className="text-gray-600">
+                  {averageRating.toFixed(1)} out of 5 ({reviews.length} reviews)
+                </span>
+              </div>
+            </div>
+
+            {/* Write a Review Button */}
+            <button className="mb-8 px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
+              Write a Review
+            </button>
+
+            {/* Reviews List */}
+            <div className="space-y-6">
+              {reviews.map((review) => (
+                <div key={review.id} className="border-b border-gray-200 pb-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-gray-900">{review.userName}</span>
+                      <div className="flex items-center">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <svg
+                            key={star}
+                            className={`w-4 h-4 ${
+                              star <= review.rating ? 'text-yellow-400' : 'text-gray-300'
+                            }`}
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {new Date(review.date).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className="text-gray-600">{review.comment}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
