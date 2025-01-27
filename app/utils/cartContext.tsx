@@ -8,6 +8,8 @@ interface CartItem {
   price: number;
   quantity: number;
   image: string;
+  color?: string;  // Make optional with ?
+  size?: string;   // Make optional with ?
 }
 
 interface CartContextType {

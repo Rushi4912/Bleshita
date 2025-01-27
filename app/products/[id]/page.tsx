@@ -18,6 +18,7 @@ type Product = {
   modelInfo: string;
 };
 
+
 // Add new types for reviews
 type Review = {
   id: string;
@@ -161,12 +162,13 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="bg-white">
+      {/* Main Container with Navbar Offset */}
       <div className="pt-[136px]">
         <div className="flex flex-col md:flex-row items-start gap-6 px-6 md:px-16 py-8">
-          {/* Image Gallery */}
+          {/* Left Side - Image Gallery */}
           <div className="w-full md:w-2/3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {displayImages.map((image, index) => (
+              {displayImages.map((image: string, index: number) => (
                 <Image
                   key={index}
                   src={image}
@@ -180,67 +182,70 @@ const ProductPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Product Details */}
-          <div className="w-full md:w-1/3 bg-white p-6 shadow-md rounded-md">
-            <h1 className="text-2xl font-bold text-black font-serif">{product.name}</h1>
-            <p className="text-xl font-medium text-gray-700 mt-2">₹ {product.price}</p>
+          {/* Right Side - Product Details */}
+          <div className="w-full md:w-1/3 bg-white p-8 shadow-md rounded-md space-y-6">
+            {/* Product Title and Price */}
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold text-black font-serif">{product.name}</h1>
+              <p className="text-xl font-medium text-gray-700">₹ {product.price}</p>
+            </div>
 
             {/* Color Options */}
             {product.colors && product.colors.length > 0 && (
-              <div className="flex items-center gap-2 mt-4">
-                <p className="text-gray-600">COLOR:</p>
-                <span className="uppercase text-black font-medium">{selectedColor}</span>
-              </div>
-            )}
-            {product.colors && product.colors.length > 0 && (
-              <div className="flex gap-2 mt-2">
-                {product.colors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedColor(color)}
-                    className={`w-8 h-8 rounded-full border ${
-                      selectedColor === color ? "border-black" : "border-gray-300"
-                    }`}
-                    style={{
-                      backgroundColor:
-                        color.toLowerCase() === "black"
-                          ? "#000"
-                          : color.toLowerCase() === "blue"
-                          ? "#1E3A8A"
-                          : "#D1D5DB",
-                    }}
-                  />
-                ))}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <p className="text-gray-600">COLOR:</p>
+                  <span className="uppercase text-black font-medium">{selectedColor}</span>
+                </div>
+                <div className="flex gap-2">
+                  {product.colors.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setSelectedColor(color)}
+                      className={`w-8 h-8 rounded-full border ${
+                        selectedColor === color ? "border-black" : "border-gray-300"
+                      }`}
+                      style={{
+                        backgroundColor:
+                          color.toLowerCase() === "black"
+                            ? "#000"
+                            : color.toLowerCase() === "blue"
+                            ? "#1E3A8A"
+                            : "#D1D5DB",
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             )}
 
             {/* Size Options */}
             {product.sizes && product.sizes.length > 0 && (
-              <div className="flex items-center gap-2 mt-4">
-                <p className="text-gray-600">SIZE:</p>
-                <span className="uppercase text-black font-medium">{selectedSize}</span>
-              </div>
-            )}
-            {product.sizes && product.sizes.length > 0 && (
-              <div className="grid grid-cols-4 gap-2 mt-2">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-4 py-2 border rounded-md ${
-                      selectedSize === size ? "border-black" : "border-gray-300"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <p className="text-gray-600">SIZE:</p>
+                  <span className="uppercase text-black font-medium">{selectedSize}</span>
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`px-4 py-2 border rounded-md ${
+                        selectedSize === size ? "border-black" : "border-gray-300"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
 
             {/* Model Info */}
-            <p className="mt-4 text-sm text-gray-500">{product.modelInfo}</p>
+            <p className="text-sm text-gray-500">{product.modelInfo}</p>
 
-            {/* Add to Bag Button */}
+            {/* Add to Cart Button */}
             <button
               onClick={() => {
                 addToCart({
@@ -253,17 +258,45 @@ const ProductPage: React.FC = () => {
                   size: selectedSize,
                 });
               }}
-              className="w-full mt-6 bg-black text-white py-3 rounded-md font-medium hover:bg-gray-800"
+              className="w-full bg-black text-white py-3 rounded-md font-medium hover:bg-gray-800"
             >
               ADD TO BAG
             </button>
 
-            {/* Additional Information */}
-            <div className="mt-6 text-sm text-gray-500">
-              <p className="font-bold">Shipping Discount</p>
-              <p>Reduced rate express shipping on orders over ₹15000.</p>
-              <p className="mt-4 font-bold">Holiday Returns</p>
-              <p>Return within 45 days of purchase. Duties & taxes are non-refundable.</p>
+            {/* Product Details Section */}
+            <div className="space-y-4 text-sm">
+              {/* Style Information */}
+              <div>
+                <h3 className="font-bold text-gray-900 mb-2">About This Style</h3>
+                <p className="text-gray-600">
+                  This piece features a mid rise, wide leg, full length, five pockets, zipper closure, made using organic cotton.
+                </p>
+              </div>
+              
+              {/* Fit Information */}
+              <div>
+                <h3 className="font-bold text-gray-900 mb-2">Fit</h3>
+                <ul className="text-gray-600 space-y-1">
+                  <li>• Mid-rise with a wide, full-length leg</li>
+                  <li>• Front Rise: 10.375"</li>
+                  <li>• Inseam: 31"</li>
+                </ul>
+                <p className="mt-2 text-gray-600 italic">
+                  Need fit or styling advice? Contact our support team.
+                </p>
+              </div>
+            </div>
+
+            {/* Shipping and Returns Information */}
+            <div className="space-y-3 text-sm text-gray-500">
+              <div>
+                <p className="font-bold">Shipping Discount</p>
+                <p>Reduced rate express shipping on orders over ₹15000.</p>
+              </div>
+              <div>
+                <p className="font-bold">Holiday Returns</p>
+                <p>Return within 45 days of purchase. Duties & taxes are non-refundable.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -271,6 +304,7 @@ const ProductPage: React.FC = () => {
         {/* Reviews Section */}
         <div className="px-6 md:px-16 py-8 border-t border-gray-200">
           <div className="max-w-4xl mx-auto">
+            {/* Reviews Header */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Customer Reviews</h2>
               <div className="flex items-center gap-2">
@@ -278,9 +312,7 @@ const ProductPage: React.FC = () => {
                   {[1, 2, 3, 4, 5].map((star) => (
                     <svg
                       key={star}
-                      className={`w-5 h-5 ${
-                        star <= averageRating ? 'text-yellow-400' : 'text-gray-300'
-                      }`}
+                      className={`w-5 h-5 ${star <= averageRating ? 'text-yellow-400' : 'text-gray-300'}`}
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -294,7 +326,7 @@ const ProductPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Write a Review Button */}
+            {/* Write Review Button */}
             <button className="mb-8 px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
               Write a Review
             </button>
@@ -313,26 +345,19 @@ const ProductPage: React.FC = () => {
                             className={`w-4 h-4 ${
                               star <= review.rating ? 'text-yellow-400' : 'text-gray-300'
                             }`}
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
                           >
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                           </svg>
                         ))}
                       </div>
                     </div>
-                    <span className="text-sm text-gray-500">
-                      {new Date(review.date).toLocaleDateString()}
-                    </span>
                   </div>
-                  <p className="text-gray-600">{review.comment}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
