@@ -183,19 +183,23 @@ const ProductPage: React.FC = () => {
           </div>
 
           {/* Right Side - Product Details */}
-          <div className="w-full md:w-1/3 bg-white p-8 shadow-md rounded-md space-y-6">
+          <div className="w-full md:w-1/3 bg-white p-8 shadow-md rounded-md space-y-8">
             {/* Product Title and Price */}
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-black font-serif">{product.name}</h1>
-              <p className="text-xl font-medium text-gray-700">₹ {product.price}</p>
+            <div className="space-y-3">
+              <h1 className="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight">
+                {product.name}
+              </h1>
+              <p className="text-xl md:text-2xl font-medium text-gray-800">
+                ₹{product.price.toLocaleString('en-IN')}
+              </p>
             </div>
 
             {/* Color Options */}
             {product.colors && product.colors.length > 0 && (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <p className="text-gray-600">COLOR:</p>
-                  <span className="uppercase text-black font-medium">{selectedColor}</span>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <p className="text-sm font-medium text-gray-700">COLOR:</p>
+                  <span className="text-sm font-medium text-gray-900 uppercase">{selectedColor}</span>
                 </div>
                 <div className="flex gap-2">
                   {product.colors.map((color) => (
@@ -221,10 +225,10 @@ const ProductPage: React.FC = () => {
 
             {/* Size Options */}
             {product.sizes && product.sizes.length > 0 && (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <p className="text-gray-600">SIZE:</p>
-                  <span className="uppercase text-black font-medium">{selectedSize}</span>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <p className="text-sm font-medium text-gray-700">SIZE:</p>
+                  <span className="text-sm font-medium text-gray-900 uppercase">{selectedSize}</span>
                 </div>
                 <div className="grid grid-cols-4 gap-2">
                   {product.sizes.map((size) => (
@@ -243,7 +247,7 @@ const ProductPage: React.FC = () => {
             )}
 
             {/* Model Info */}
-            <p className="text-sm text-gray-500">{product.modelInfo}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">{product.modelInfo}</p>
 
             {/* Add to Cart Button */}
             <button
@@ -258,44 +262,57 @@ const ProductPage: React.FC = () => {
                   size: selectedSize,
                 });
               }}
-              className="w-full bg-black text-white py-3 rounded-md font-medium hover:bg-gray-800"
+              className="w-full bg-gray-900 text-white py-4 rounded-md font-medium hover:bg-black transition-colors duration-200"
             >
-              ADD TO BAG
+              Add to Bag
             </button>
 
             {/* Product Details Section */}
-            <div className="space-y-4 text-sm">
+            <div className="space-y-6">
               {/* Style Information */}
               <div>
-                <h3 className="font-bold text-gray-900 mb-2">About This Style</h3>
-                <p className="text-gray-600">
+                <h3 className="text-base font-semibold text-gray-900 mb-3">About This Style</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
                   This piece features a mid rise, wide leg, full length, five pockets, zipper closure, made using organic cotton.
                 </p>
               </div>
               
               {/* Fit Information */}
               <div>
-                <h3 className="font-bold text-gray-900 mb-2">Fit</h3>
-                <ul className="text-gray-600 space-y-1">
-                  <li>• Mid-rise with a wide, full-length leg</li>
-                  <li>• Front Rise: 10.375"</li>
-                  <li>• Inseam: 31"</li>
+                <h3 className="text-base font-semibold text-gray-900 mb-3">Fit</h3>
+                <ul className="text-sm text-gray-600 space-y-2">
+                  <li className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>Mid-rise with a wide, full-length leg</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>Front Rise: 10.375"</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>Inseam: 31"</span>
+                  </li>
                 </ul>
-                <p className="mt-2 text-gray-600 italic">
+                <p className="mt-3 text-sm text-gray-600 italic">
                   Need fit or styling advice? Contact our support team.
                 </p>
               </div>
             </div>
 
             {/* Shipping and Returns Information */}
-            <div className="space-y-3 text-sm text-gray-500">
+            <div className="space-y-4 pt-4 border-t border-gray-100">
               <div>
-                <p className="font-bold">Shipping Discount</p>
-                <p>Reduced rate express shipping on orders over ₹15000.</p>
+                <p className="text-sm font-semibold text-gray-900 mb-1">Shipping Discount</p>
+                <p className="text-sm text-gray-600">
+                  Reduced rate express shipping on orders over ₹15000.
+                </p>
               </div>
               <div>
-                <p className="font-bold">Holiday Returns</p>
-                <p>Return within 45 days of purchase. Duties & taxes are non-refundable.</p>
+                <p className="text-sm font-semibold text-gray-900 mb-1">Holiday Returns</p>
+                <p className="text-sm text-gray-600">
+                  Return within 45 days of purchase. Duties & taxes are non-refundable.
+                </p>
               </div>
             </div>
           </div>
