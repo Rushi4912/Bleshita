@@ -1,48 +1,37 @@
 // FeatureCollection.tsx
 import React from "react";
 import { FeatureCollectionProps } from "../types/types"; // Import the type
+import Link from "next/link";
 
 const FeatureCollection: React.FC<FeatureCollectionProps> = ({
-  title,
-  description,
   collections,
 }) => {
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Title and Description */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">{title}</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {description}
-          </p>
-        </div>
-
-        {/* Collection Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {collections.map((collection, index) => (
-            <div key={index} className="text-center">
-              {/* Image */}
-              <div className="relative w-full h-64 sm:h-72">
-                <img
-                  src={collection.imageUrl}
-                  alt={collection.title}
-                  className="w-full h-full object-cover object-center rounded-lg shadow-lg"
-                />
-              </div>
-
-              {/* Clickable Text/Button */}
-              <a
-                href="#"
-                className="mt-4 inline-block text-gray-800 font-medium text-sm underline hover:text-gray-600 transition"
-              >
+    <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
+      {collections.map((collection, index) => (
+        <div key={index} className="relative group">
+          <img
+            src={collection.imageUrl}
+            alt={collection.title}
+            className="w-full h-full object-cover"
+          />
+          {/* Overlay Content */}
+          <div className="absolute inset-0 transition-all duration-300">
+            <div className="absolute left-8 top-1/2 -translate-y-1/2 transform translate-x-4 group-hover:translate-x-0 transition-transform duration-300">
+              <h3 className="text-gray-900 text-sm font-light tracking-widest uppercase mb-2">
                 {collection.title}
-              </a>
+              </h3>
+              <Link 
+                href="/new-arrivals"
+                className="inline-block text-gray-900 text-xs tracking-widest uppercase border-b border-gray-900 hover:opacity-70 transition-opacity"
+              >
+                Shop Now
+              </Link>
             </div>
-          ))}
+          </div>
         </div>
-      </div>
-    </section>
+      ))}
+    </div>
   );
 };
 

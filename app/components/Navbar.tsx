@@ -52,14 +52,14 @@ const Navbar: React.FC = () => {
 
       {/* Main Navbar - h-16 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 h-16">
-        <div className="flex justify-between items-center">
-          {/* Hamburger Menu for Mobile */}
+        <div className="flex items-center justify-between relative">
+          {/* Mobile Menu Button */}
           <button className="md:hidden text-gray-700" onClick={toggleMobileMenu}>
             <FiMenu size={24} />
           </button>
 
-          {/* Main Navigation Links (Desktop Only) */}
-          <nav className="hidden md:flex space-x-8">
+          {/* Left Navigation Links (Desktop Only) */}
+          <nav className="hidden md:flex space-x-8 w-1/3">
             <Link href="/women" className="text-gray-700 hover:text-black">
               Women
             </Link>
@@ -75,15 +75,15 @@ const Navbar: React.FC = () => {
           </nav>
 
           {/* Centered Logo */}
-          <div className="flex justify-center flex-grow md:flex-grow-0">
-            <div className="text-xl font-semibold text-black tracking-wide uppercase">
-              Bleshita
+          <div className="absolute left-1/2 transform -translate-x-1/2">
+            <div className="text-xl font-semibold text-black tracking-widest uppercase">
+              <a href="/">Bleshita</a>
             </div>
           </div>
 
-          {/* Right: Search, Sign In/Sign Up, and Cart Icons */}
-          <div className="flex items-center space-x-6 relative">
-            {/* Search Icon - Updated with onClick handler */}
+          {/* Right Icons */}
+          <div className="flex items-center space-x-6 w-1/3 justify-end">
+            {/* Search Icon */}
             <AiOutlineSearch 
               className="text-gray-700 hover:text-black w-5 h-5 cursor-pointer" 
               onClick={handleSearchClick}

@@ -14,7 +14,7 @@ const ProductFeature: React.FC<ProductFeatureProps> = ({
   reverse = false,
 }) => {
   return (
-    <section className="bg-white border-t border-gray-200">
+    <section className="bg-white border-b border-black border-gray-200">
       <div
         className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row ${
           reverse ? "lg:flex-row-reverse" : ""
@@ -40,7 +40,7 @@ const ProductFeature: React.FC<ProductFeatureProps> = ({
           {/* Centered Learn More Button */}
           <div className="flex justify-center ">
             <button className="px-6 py-3 bg-gray-900 text-white rounded-full text-base font-medium hover:bg-gray-700 transition">
-              Learn More
+              <a href="/cult-favourites">Learn More</a>
             </button>
           </div>
         </div>

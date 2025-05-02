@@ -1,27 +1,37 @@
 // components/HeroSection.tsx
 import React from 'react';
+import Link from 'next/link';
 
 const HeroSection = () => {
   return (
-    <section className="relative h-screen bg-cover bg-center" style={{ backgroundImage: "url('/assets/holiday/banner.jpeg')",filter: 'brightness(1.5)' }}>
-  <div className="absolute inset-0 bg-black opacity-50"></div> {/* Overlay for better text contrast */}
-  <div className="relative z-10 flex items-center justify-center h-full text-center text-white px-6 sm:px-12">
-    <div className="max-w-3xl mx-auto space-y-4">
-      <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-        Elevate Your Style with Bleshita
-      </h1>
-      <p className="text-extrasmall sm:text-small font-light">
-        Discover timeless fashion pieces with a perfect blend of modern design and sustainable craftsmanship.
-      </p>
-      <div className="mt-8">
-        <button  className="px-6 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-full hover:bg-indigo-700 transition duration-300">
-          Shop Now
-        </button>
+    <div className="relative h-full w-full">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ 
+          backgroundImage: "url('/assets/holiday/banner2.jpeg')",
+          filter: 'brightness(1.0) contrast(1.0)',
+          backgroundPosition: 'center top'
+        }}
+      />
+      
+      {/* Content */}
+      <div className="relative h-full flex flex-col items-center justify-center text-center px-4">
+        <div className="space-y-4">
+          <h1 className="text-md md:text-xl font-light tracking-widest uppercase text-gray-900 mr-10">
+            New Summer-Ready Arrivals
+          </h1>
+          <div className="pt-2">
+            <Link 
+              href="/new-arrivals" 
+              className="text-gray-900 text-[12px] tracking-widest border-b border-black pb-1 hover:opacity-80 transition-opacity mr-15 uppercase"
+            >
+              Shop Now
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
-
   );
 };
 
