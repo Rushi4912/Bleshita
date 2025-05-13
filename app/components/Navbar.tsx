@@ -10,10 +10,10 @@ import { useRouter } from 'next/navigation';
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isCartOpen, setCartOpen] = useState(false); // State for cart drawer
-  const [isDropdownOpen, setDropdownOpen] = useState(false); // State for Sign In/Sign Up dropdown
-  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown element
-  const { cartItems } = useCart(); // Access cart items from context
+  const [isCartOpen, setCartOpen] = useState(false); 
+  const [isDropdownOpen, setDropdownOpen] = useState(false); 
+  const dropdownRef = useRef<HTMLDivElement>(null); 
+  const { cartItems } = useCart(); 
   const router = useRouter();
 
   const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);

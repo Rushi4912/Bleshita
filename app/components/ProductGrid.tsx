@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCart } from '../../app/utils/cartContext'; // Adjust the path to your CartContext
+import { useCart } from '../../app/utils/cartContext'; 
 
 interface Product {
   id: string;
